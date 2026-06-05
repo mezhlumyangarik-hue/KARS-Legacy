@@ -19,8 +19,8 @@ else:
 DB_NAME = os.path.join(PERSISTENT_STORAGE, 'doors_database.db')
 UPLOAD_FOLDER = os.path.join(PERSISTENT_STORAGE, 'static', 'uploads')
 
-# Ապահովում ենք, որ պապկաները ավտոմատ ստեղծվեն
-os.makedirs(os.path.dirname(DB_NAME), exist_ok=True)
+DB_NAME = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'doors_database.db')
+#os.makedirs(os.path.dirname(DB_NAME), exist_ok=True)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
