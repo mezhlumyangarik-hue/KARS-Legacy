@@ -54,9 +54,9 @@
             
             <div style="position: absolute; top: 15px; left: 15px; background: linear-gradient(135deg, #d4af37, #aa7c11); color: #000; font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 20px; text-transform: uppercase; z-index: 3;">ՆՈՐՈՒՅԹ</div>
 
-            <div style="position: relative; width: 100%; height: 320px; overflow: hidden; background: #161616;">
+            <div style="position: relative; width: 100%; height: 380px; overflow: hidden; background: #161616;">
                 {% if product.main_image %}
-                    <img src="{{ product.main_image }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease;">
+                    <img src="{{ url_for('static', filename='uploads/' + product.main_image) }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
                 {% endif %}
                 
                 <div id="svg-fallback-{{ product.id }}" class="svg-fallback-box {% if product.main_image %}has-image{% endif %}" style="width: 100%; height: 100%; align-items: center; justify-content: center; background: #161616;">
@@ -201,7 +201,6 @@
     </div>
 </section>
 
-
 <script>
     let currentIdx = 0;
     const track = document.querySelector('.carousel-track');
@@ -277,13 +276,15 @@
         background: #d4af37 !important;
         color: #000 !important;
     }
+    
+    /* 🌟 ԹԱՐՄԱՑՎԱԾ ԷՖԵԿՏՆԵՐԸ ՀԵՌՎԻՑ ՍԻՐՈՒՆ ԵՐԵՎԱԼՈՒ ՀԱՄԱՐ */
     .product-premium-card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(212, 175, 55, 0.2);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        transform: translateY(-8px) !important;
+        border-color: rgba(212, 175, 55, 0.4) !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
     }
     .product-premium-card:hover img {
-        transform: scale(1.04);
+        transform: scale(1.08) !important; /* Նկարը սիրուն առաջ կգա */
     }
     .why-card:hover, .portfolio-card:hover {
         background: #1a1a1a !important;
