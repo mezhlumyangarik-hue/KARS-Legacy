@@ -1,0 +1,185 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<style>
+    .checkout-section {
+        padding: 80px 5%;
+        display: flex;
+        justify-content: center;
+        background-color: #0e0e0e;
+        border-top: 1px solid rgba(212,175,55,0.1);
+    }
+    .checkout-box {
+        width: 100%;
+        max-width: 550px;
+        background: #161616;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.04);
+    }
+    .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: #111111;
+        color: #fff;
+        border-radius: 8px;
+        font-size: 14px;
+        box-sizing: border-box;
+        outline: none;
+        transition: all 0.3s;
+    }
+    .form-control:focus {
+        border-color: #d4af37;
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+        background: #141414;
+    }
+</style>
+
+<section class="checkout-section">
+    <div class="checkout-box">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.06);">
+            <h2 style="margin: 0; color: #fff; font-size: 22px; font-weight: 700; letter-spacing: 0.5px;">Պատվերի Ձևակերպում</h2>
+            
+            <button type="button" id="mode-toggle-btn" onclick="togglePaymentMode()" 
+                    style="background: linear-gradient(135deg, #ff7b00, #ff5100); 
+                           color: #fff; 
+                           font-size: 11px; 
+                           font-weight: 800; 
+                           padding: 6px 16px; 
+                           border-radius: 20px; 
+                           text-transform: uppercase; 
+                           border: none; 
+                           cursor: pointer; 
+                           letter-spacing: 0.5px; 
+                           box-shadow: 0 0 12px rgba(255, 81, 0, 0.3); 
+                           transition: all 0.3s ease;
+                           min-width: 105px; 
+                           height: 28px;
+                           line-height: 16px;
+                           outline: none;">
+                TEST MODE
+            </button>
+        </div>
+
+        <form action="{{ url_for('submit_cart_checkout') }}" method="POST">
+            <h4 style="color: #d4af37; margin: 0 0 18px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">1. Առաքման Տվյալներ</h4>
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 35px;">
+                <div>
+                    <input type="text" name="client_name" class="form-control" placeholder="Ձեր Անուն Ազգանունը" required>
+                </div>
+                <div>
+                    <input type="text" name="client_phone" class="form-control" placeholder="Հեռախոսահամար (+374)" required>
+                </div>
+            </div>
+
+            <h4 style="color: #d4af37; margin: 0 0 18px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">2. Դրամարկղային Վճարում</h4>
+            
+            <div style="background: linear-gradient(135deg, #1f1f1f 0%, #151515 100%); border: 1px solid rgba(255,255,255,0.04); padding: 25px; border-radius: 12px; margin-bottom: 35px; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);">
+                <div style="position: relative; margin-bottom: 18px;">
+                    <label style="color: #888; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 0.5px;">Քարտի Համարը</label>
+                    <input type="text" name="card_number" id="card_number" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19" required style="padding-right: 140px; font-size: 16px; letter-spacing: 1.5px;">
+                    
+                    <div style="position: absolute; right: 15px; bottom: 11px; pointer-events: none; display: flex; align-items: center; gap: 8px; height: 24px;">
+                        <div id="bank_logo_container" style="display: flex; align-items: center;"></div>
+                        <div id="card_brand_container" style="display: flex; align-items: center;">
+                            <svg viewBox="0 0 32 32" style="width: 24px; height: 24px;"><path fill="#d4af37" d="M29 4H3a3 3 0 0 0-3 3v18a3 3 0 0 0 3 3h26a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM3 6h26a1 1 0 0 1 1 1v3H2V7a1 1 0 0 1-1-1zm26 20H3a1 1 0 0 1-1-1V14h28v11a1 1 0 0 1-1 1z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <label style="color: #888; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 0.5px;">Ժամկետ</label>
+                        <input type="text" name="card_expiry" id="card_expiry" class="form-control" placeholder="MM / YY" maxlength="5" required style="text-align: center; font-size: 15px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="color: #888; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 0.5px;">CVC / CVV</label>
+                        <input type="password" name="card_cvc" class="form-control" placeholder="•••" maxlength="3" required style="text-align: center; font-size: 15px; letter-spacing: 2px;">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%); color: #000; font-weight: 700; font-size: 16px; border: none; cursor: pointer; border-radius: 8px; transition: 0.3s; box-shadow: 0 5px 20px rgba(212,175,55,0.25);" onmouseover="this.style.background='#fff'" onmouseout="this.style.background='linear-gradient(135deg, #d4af37 0%, #aa7c11 100%)'">
+                Հաստատել Վճարումը՝ {{ "{:,}".format(total_price) }} ֏
+            </button>
+        </form>
+    </div>
+</section>
+
+<script>
+    // 🧠 ԿՈՃԱԿԻ ԱՆՍԱՀՄԱՆԱՓԱԿ ՓՈԽՎԵԼՈՒ ՖՈՒՆԿՑԻԱՆ
+    function togglePaymentMode() {
+        var btn = document.getElementById('mode-toggle-btn');
+        if (btn.innerText === "TEST MODE") {
+            btn.innerText = "LIVE MODE";
+            btn.style.background = "linear-gradient(135deg, #28a745, #1e7e34)";
+            btn.style.boxShadow = "0 0 12px rgba(40, 167, 69, 0.3)";
+        } else {
+            btn.innerText = "TEST MODE";
+            btn.style.background = "linear-gradient(135deg, #ff7b00, #ff5100)";
+            btn.style.boxShadow = "0 0 12px rgba(255, 81, 0, 0.3)";
+        }
+    }
+
+    const LOGOS = {
+        visa: `<span style="color:#fff; background:#1A1F71; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:900; letter-spacing:0.5px; box-shadow:0 2px 4px rgba(0,0,0,0.3);">VISA</span>`,
+        mastercard: `<span style="color:#fff; background:#0A1520; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:900; box-shadow:0 2px 4px rgba(0,0,0,0.3);"><span style="color:#FF5F00;">•</span>MC</span>`,
+        arca: `<span style="color:#0093d1; background:#fff; padding:2px 6px; border-radius:4px; font-size:10px; font-weight:900; border:1px solid #0093d1; box-shadow:0 2px 4px rgba(0,0,0,0.3);">ArCa</span>`,
+        
+        acba: `<span style="color:#fff; background:#009640; padding:2px 6px; border-radius:3px; font-size:9px; font-weight:800;">ACBA</span>`,
+        ameria: `<span style="color:#fff; background:#D4AF37; padding:2px 6px; border-radius:3px; font-size:9px; font-weight:800;">AMERIA</span>`,
+        ineco: `<span style="color:#fff; background:#00A4E4; padding:2px 6px; border-radius:3px; font-size:9px; font-weight:800;">INECO</span>`,
+        idbank: `<span style="color:#fff; background:#FF5E00; padding:2px 6px; border-radius:3px; font-size:9px; font-weight:800;">IDBank</span>`,
+        vtb: `<span style="color:#fff; background:#0A255C; padding:2px 6px; border-radius:3px; font-size:9px; font-weight:800;">ՎՏԲ</span>`,
+        converse: `<span style="color:#fff; background:#722F37; padding:2px 6px; border-radius:3px; font-size:9px; font-weight:800;">CONVERSE</span>`
+    };
+
+    document.getElementById('card_number').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\s+/g, '');
+        let brandContainer = document.getElementById('card_brand_container');
+        let bankContainer = document.getElementById('bank_logo_container');
+        
+        if (value.startsWith('4')) {
+            brandContainer.innerHTML = LOGOS.visa;
+        } else if (/^5[1-5]/.test(value)) {
+            brandContainer.innerHTML = LOGOS.mastercard;
+        } else if (value.startsWith('9051')) {
+            brandContainer.innerHTML = LOGOS.arca;
+        } else {
+            brandContainer.innerHTML = `<svg viewBox="0 0 32 32" style="width: 24px; height: 24px;"><path fill="#d4af37" d="M29 4H3a3 3 0 0 0-3 3v18a3 3 0 0 0 3 3h26a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM3 6h26a1 1 0 0 1 1 1v3H2V7a1 1 0 0 1-1-1zm26 20H3a1 1 0 0 1-1-1V14h28v11a1 1 0 0 1-1 1z"/></svg>`;
+        }
+
+        let first6 = value.substring(0, 6);
+        if (first6.startsWith('411259') || first6.startsWith('405254') || first6.startsWith('542512')) {
+            bankContainer.innerHTML = LOGOS.acba;
+        } else if (first6.startsWith('440437') || first6.startsWith('512061') || first6.startsWith('905131')) {
+            bankContainer.innerHTML = LOGOS.ameria;
+        } else if (first6.startsWith('429352') || first6.startsWith('421639')) {
+            bankContainer.innerHTML = LOGOS.ineco;
+        } else if (first6.startsWith('434153') || first6.startsWith('547154') || first6.startsWith('905151')) {
+            bankContainer.innerHTML = LOGOS.idbank;
+        } else if (first6.startsWith('421151') || first6.startsWith('544332')) {
+            bankContainer.innerHTML = LOGOS.vtb;
+        } else if (first6.startsWith('486121') || first6.startsWith('549443')) {
+            bankContainer.innerHTML = LOGOS.converse;
+        } else {
+            bankContainer.innerHTML = ''; 
+        }
+
+        let target = e.target;
+        let formatted = value.replace(/[^0-9]/gi, '').match(/\d{4,16}/g);
+        let match = formatted && formatted[0] || '';
+        let parts = [];
+        for (let i=0, len=match.length; i<len; i+=4) { parts.push(match.substring(i, i+4)); }
+        if (parts.length > 0) { target.value = parts.join(' '); } else { target.value = value; }
+    });
+
+    document.getElementById('card_expiry').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 2) { e.target.value = value.slice(0, 2) + '/' + value.slice(2, 4); }
+    });
+</script>
+{% endblock %}

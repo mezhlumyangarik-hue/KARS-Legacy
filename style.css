@@ -1,0 +1,474 @@
+/* ==========================================================================
+   1. ԳԼԽԱՎՈՐ ՈՃԵՐ (GLOBAL STYLES)
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0e0e0e;
+    color: #eeeeee;
+    line-height: 1.6;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* ==========================================================================
+   2. ՄԵՆՅՈՒ (NAVBAR) & ԼՈԳՈ
+   ========================================================================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 5%;
+    background-color: #141414;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.logo-svg {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-container:hover .logo-svg {
+    transform: rotateY(180deg);
+}
+
+.logo-text {
+    font-family: 'Times New Roman', Times, serif;
+    margin-left: 5px;
+    line-height: 1.1;
+}
+
+.logo-text span {
+    display: block;
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #f3e0aa 0%, #d4af37 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-text small {
+    display: block;
+    font-size: 9px;
+    color: #b5b5b5;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-top: 3px;
+    text-transform: uppercase;
+}
+
+/* Որոնման Դաշտ */
+.search-container {
+    flex: 0 1 320px;
+    margin: 0 20px;
+}
+
+.search-container form {
+    display: flex;
+    background: #1c1c1c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.search-container form:focus-within {
+    border-color: #d4af37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+}
+
+.search-container input {
+    width: 100%;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-container button {
+    background: transparent;
+    border: none;
+    color: #d4af37;
+    padding: 0 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-container button:hover {
+    background: #d4af37;
+    color: #000;
+}
+
+/* Մենյուի Հղումներ */
+.nav-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #999;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: #d4af37;
+}
+
+.cart-link {
+    background-color: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cart-link:hover {
+    border-color: rgba(212, 175, 55, 0.3);
+    background-color: #222;
+}
+
+.cart-count {
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    color: #000;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 50%;
+    font-size: 11px;
+    margin-left: 5px;
+}
+
+.call-btn {
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+    color: #000 !important;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-weight: 700;
+    border-radius: 6px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.call-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.35);
+}
+
+/* ==========================================================================
+   3. HERO ԲԱԺԻՆ
+   ========================================================================== */
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200') no-repeat center center/cover;
+    height: 65vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    padding: 0 20px;
+}
+
+.hero h1 {
+    font-size: 46px;
+    font-weight: 700;
+    color: #d4af37;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+}
+
+.hero p {
+    font-size: 18px;
+    max-width: 650px;
+    margin-bottom: 30px;
+    color: #ccc;
+    font-weight: 300;
+}
+
+.btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+    color: #000;
+    padding: 14px 36px;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.btn:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   4. ԽԱՆՈՒԹ ԵՎ ԱՊՐԱՆՔՆԵՐԻ ՔԱՐՏԵՐ (CATALOG)
+   ========================================================================== */
+.catalog-section {
+    padding: 70px 5%;
+    background-color: #0e0e0e;
+}
+
+.catalog-section h2 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* Կատեգորիաների Ֆիլտր */
+.categories-filter {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 35px 0 45px 0;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background-color: #161616;
+    color: #aaa;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background-color: #d4af37;
+    color: #000;
+    border-color: #d4af37;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
+/* Ապրանքների Ցանց (Grid) */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Ապրանքի Քարտ */
+.product-card {
+    background-color: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(212, 175, 55, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.badge-new {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    color: #000;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+
+.product-image {
+    font-size: 65px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.product-card h3 {
+    font-size: 19px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.specs {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+    font-weight: 400;
+}
+
+.price {
+    font-size: 23px;
+    font-weight: 700;
+    color: #d4af37;
+    margin: 18px 0;
+    letter-spacing: 0.5px;
+}
+
+.buy-btn {
+    width: 100%;
+    background-color: #1e1e1e;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 13px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.buy-btn:hover {
+    background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+    color: #000;
+    border-color: #d4af37;
+    font-weight: 700;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.25);
+}
+
+/* ==========================================================================
+   5. ՖՈՒՏԵՐ (FOOTER)
+   ========================================================================== */
+.footer {
+    background-color: #0b0b0b;
+    color: #888;
+    padding: 65px 5% 25px 5%;
+    margin-top: 70px;
+    border-top: 2px solid rgba(212, 175, 55, 0.15);
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 45px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-brand p { 
+    font-size: 13px; 
+    margin-top: 18px; 
+    color: #666; 
+    line-height: 1.5;
+}
+
+.footer-links h4, .footer-contact h4 { 
+    color: #fff; 
+    margin-bottom: 22px; 
+    font-size: 15px; 
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-links ul { 
+    list-style: none; 
+}
+
+.footer-links ul li { 
+    margin-bottom: 12px; 
+}
+
+.footer-links ul li a { 
+    color: #888; 
+    text-decoration: none; 
+    font-size: 14px; 
+    transition: all 0.2s ease;
+}
+
+.footer-links ul li a:hover { 
+    color: #d4af37; 
+    padding-left: 6px; 
+}
+
+.footer-contact p { 
+    font-size: 14px; 
+    margin-bottom: 12px; 
+    color: #888; 
+}
+
+.footer-contact a { 
+    color: #d4af37; 
+    text-decoration: none; 
+    font-weight: 500;
+}
+
+.footer-bottom { 
+    text-align: center; 
+    margin-top: 55px; 
+    padding-top: 25px; 
+    border-top: 1px solid rgba(255, 255, 255, 0.03); 
+    font-size: 12px; 
+    color: #444; 
+}
+
+/* ==========================================================================
+   6. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 768px) {
+    .navbar { 
+        flex-direction: column; 
+        gap: 16px; 
+        padding: 20px 5%;
+    }
+    .search-container { 
+        width: 100%; 
+        margin: 5px 0; 
+    }
+    .nav-links { 
+        width: 100%; 
+        justify-content: center; 
+        flex-wrap: wrap; 
+        gap: 10px;
+    }
+    .hero h1 {
+        font-size: 32px;
+    }
+    .hero p {
+        font-size: 15px;
+    }
+}

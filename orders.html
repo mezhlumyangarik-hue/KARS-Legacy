@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="order-page-container" style="background: radial-gradient(circle at top, #141414 0%, #0a0a0a 100%); color: #fff; padding: 80px 5%; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; min-height: 90vh; display: flex; justify-content: center; align-items: center; box-sizing: border-box;">
+    
+    <div class="order-card" style="background: linear-gradient(145deg, #161616, #111111); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 20px; width: 100%; max-width: 680px; padding: 50px 45px; box-shadow: 0 30px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.02); box-sizing: border-box; position: relative; overflow: hidden;">
+        
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #aa7c11, #d4af37, #aa7c11);"></div>
+        
+        <h1 style="font-size: 32px; color: #ffffff; font-weight: 800; margin-top: 0; margin-bottom: 12px; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">
+            Անհատական <span style="color: #d4af37; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.25); display: inline-block;">Պատվեր</span>
+        </h1>
+        
+        <p style="color: #888; font-size: 15px; text-align: center; margin-top: 0; margin-bottom: 40px; line-height: 1.6; max-width: 520px; margin-left: auto; margin-right: auto; letter-spacing: 0.2px;">
+            Լրացրեք Ձեր տվյալները, և Գորիսի արտադրամասի մեր մասնագետը կկապնվի Ձեզ հետ անվճար չափագրման համար։
+        </p>
+        
+        <form action="{{ url_for('submit_order') }}" method="POST" style="margin: 0;">
+            
+            <div class="form-row" style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 22px;">
+                <div class="form-group" style="flex: 1; min-width: 250px;">
+                    <label for="name" style="display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Անուն Ազգանուն *</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Օր.՝ Արմեն Գրիգորյան" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #fff; padding: 14px 16px; font-size: 15px; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s;">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 250px;">
+                    <label for="phone" style="display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Հեռախոսահամար *</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="Օր.՝ 094 XXXXXX" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #fff; padding: 14px 16px; font-size: 15px; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s;">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 22px;">
+                <label for="city" style="display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Բնակավայր (Սյունիքի մարզ) *</label>
+                <select id="city" name="city" class="form-control" required style="width: 100%; background: #111; border: 1px solid rgba(255,255,255,0.08); color: #fff; padding: 14px 16px; font-size: 15px; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s; cursor: pointer;">
+                    <option value="" disabled selected style="color: #666;">Ընտրեք Ձեր քաղաքը/գյուղը</option>
+                    <option value="Գորիս">Գորիս</option>
+                    <option value="Կապան">Կապան</option>
+                    <option value="Սիսիան">Սիսիան</option>
+                    <option value="Մեղրի">Մեղրի</option>
+                    <option value="Քաջարան">Քաջարան</option>
+                    <option value="Այլ բնակավայր">Այլ բնակավայր Սյունիքում</option>
+                </select>
+            </div>
+
+            <div class="form-row" style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 22px;">
+                <div class="form-group" style="flex: 1; min-width: 250px;">
+                    <label for="door_type" style="display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Դռան Տեսակ</label>
+                    <select id="door_type" name="door_type" class="form-control" style="width: 100%; background: #111; border: 1px solid rgba(255,255,255,0.08); color: #fff; padding: 14px 16px; font-size: 15px; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s; cursor: pointer;">
+                        <option value="Մուտքի մետաղական">Մուտքի մետաղական</option>
+                        <option value="Երկկողմանի MDF">Երկկողմանի MDF</option>
+                        <option value="Բնական փայտով">Բնական փայտով</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 250px;">
+                    <label for="size" style="display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Մոտավոր չափսեր (եթե գիտեք)</label>
+                    <input type="text" id="size" name="size" class="form-control" placeholder="Օր.՝ 90x200 սմ" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #fff; padding: 14px 16px; font-size: 15px; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s;">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 35px;">
+                <label for="notes" style="display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Լրացուցիչ պահանջներ կամ հարցեր</label>
+                <textarea id="notes" name="notes" class="form-control" rows="4" placeholder="Նշեք գույնի, փականների կամ դիզայնի Ձեր նախընտրությունները..." style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); color: #fff; padding: 14px 16px; font-size: 15px; border-radius: 8px; box-sizing: border-box; outline: none; resize: none; height: 110px; transition: 0.3s; font-family: sans-serif;"></textarea>
+            </div>
+
+            <button type="submit" class="btn-luxury-submit" style="width: 100%; background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%); color: #000; padding: 16px; border: none; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25); border: 1px solid rgba(255,255,255,0.1); outline: none;">
+                Ուղարկել Հայտը →
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #d4af37 !important;
+        background: rgba(255,255,255,0.02) !important;
+        box-shadow: 0 0 10px rgba(212,175,55,0.1);
+    }
+
+    .btn-luxury-submit:hover {
+        background: #ffffff !important;
+        color: #000000 !important;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25) !important;
+    }
+</style>
+{% endblock %}
