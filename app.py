@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, abort, session, redirect, url_for, jsonify
-import sqlite3
+import psycopg2
+from psycopg2.extras import DictCursor
 import os
 from werkzeug.utils import secure_filename
 
@@ -9,26 +10,30 @@ app.secret_key = 'mezhlumyan_doors_ultra_secret_key_999'
 # ==========================================
 # 📂 ՃԻՇՏ ՃԱՆԱՊԱՐՀՆԵՐ (RENDER-Ի ՀԱՄԱՐ)
 # ==========================================
-# Բոլոր ֆայլերը պահում ենք պրոյեկտի հիմնական թղթապանակում
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-DB_NAME = os.path.join(BASE_DIR, 'doors_database.db')
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
-
-# Ստեղծում ենք uploads պապկան, եթե դեռ չկա
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# 🛠️ ԲԱԶԱՅԻ ՍՏԵՂԾՈՒՄ
+# ==========================================
+# 🔗 ՄԻԱՑՈՒՄ SUPABASE POSTGRESQL ԲԱԶԱՅԻՆ
+# ==========================================
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+def get_db_connection():
+    # Կապվում է Render-ի Environment-ի հղումով Supabase բազային
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    return conn
+
+# 🛠️ ԲԱԶԱՅԻ ԱՂՅՈՒՍԱԿՆԵՐԻ ՍՏԵՂԾՈՒՄ (PostgreSQL ՍԻՆՏԱՔՍՈՎ)
 def init_db():
-    conn = sqlite3.connect(DB_NAME)
+    conn = get_db_connection()
     cursor = conn.cursor()
     
-    # 1. Ապրանքներ
+    # 1. Ապրանքներ (desc-ի փոխարեն օգտագործում ենք desc_text)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS products (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             title TEXT NOT NULL,
             price INTEGER NOT NULL,
             metal TEXT,
@@ -36,62 +41,66 @@ def init_db():
             filler TEXT,
             category TEXT,
             is_new INTEGER,
-            desc TEXT,
+            desc_text TEXT,
             main_image TEXT,
             gallery_images TEXT
-        )
+        );
     ''')
     
-    # 2. Զամբյուղի Պատվերներ (Քարտով գնումներ)
+    # 2. Զամբյուղի Պատվերներ
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             customer_name TEXT,
             phone_number TEXT,
             products TEXT,
             total_amount REAL,
             mode TEXT,
             date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
+        );
     ''')
 
-    # 3. Չափագրումներ (Անհատական պատվերներ)
+    # 3. Չափագրումներ
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS measurements (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             customer_name TEXT,
             phone_number TEXT,
             address TEXT,
             date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
+        );
     ''')
     
     conn.commit()
+    cursor.close()
     conn.close()
 
+# Ավտոմատ կանչում ենք աղյուսակների ստեղծումը Supabase-ում
 init_db()
 
 def get_all_products_from_db():
     try:
-        conn = sqlite3.connect(DB_NAME)
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, title, price, metal, wood, filler, category, is_new, desc, main_image, gallery_images FROM products ORDER BY id DESC")
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=DictCursor)
+        cursor.execute("SELECT id, title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images FROM products ORDER BY id DESC")
         rows = cursor.fetchall()
+        cursor.close()
         conn.close()
+        
         products = []
         for r in rows:
             products.append({
-                'id': r[0], 
-                'title': r[1], 
-                'price': r[2], 
-                'metal': r[3], 
-                'wood': r[4], 
-                'filler': r[5],
-                'category': r[6], 
-                'is_new': bool(r[7]), 
-                'desc': r[8], 
-                'main_image': r[9] if r[9] else '',
-                'gallery_images': r[10].split(',') if r[10] else []
+                'id': r['id'], 
+                'title': r['title'], 
+                'price': r['price'], 
+                'metal': r['metal'], 
+                'wood': r['wood'], 
+                'filler': r['filler'],
+                'category': r['category'], 
+                'is_new': bool(r['is_new']), 
+                'desc': r['desc_text'],  # Պահում ենք 'desc' անունը HTML-ների համար
+                'main_image': r['main_image'] if r['main_image'] else '',
+                'gallery_images': r['gallery_images'].split(',') if r['gallery_images'] else []
             })
         return products
     except Exception as e:
@@ -111,7 +120,7 @@ def inject_cart_count():
     return dict(cart_count=total_count, site_mode=site_mode)
 
 # ==========================================
-# 🌟 ՆԿԱՐՆԵՐԻ ՎԵՐԲԵՌՆՄԱՆ ԵՐԹՈՒՂԻ (UPLOAD ROUTE)
+# 🌟 ՆԿԱՐՆԵՐԻ ՎԵՐԲԵՌՆՄԱՆ ԵՐԹՈՒՂԻ
 # ==========================================
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -125,9 +134,6 @@ def upload_file():
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
-        
-        # Քանի որ նկարները պահվում են արտաքին /var/data պապկայում, 
-        # Render-ում դրանք կարդալու համար վերադարձնում ենք /static/uploads/filename URL-ը
         return jsonify({'location': f'/static/uploads/{filename}'})
 
 # ==========================================
@@ -159,18 +165,25 @@ def search():
         return redirect(url_for('shop_page'))
         
     try:
-        conn = sqlite3.connect(DB_NAME)
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, title, price, metal, wood, filler, category, is_new, desc, main_image, gallery_images FROM products WHERE title LIKE ? OR desc LIKE ? ORDER BY id DESC", (f'%{query}%', f'%{query}%'))
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=DictCursor)
+        # PostgreSQL-ում LIKE-ի փոխարեն ILIKE ենք անում, որ մեծատառ/փոքրատառ կապ չունենա
+        cursor.execute("""
+            SELECT id, title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images 
+            FROM products 
+            WHERE title ILIKE %s OR desc_text ILIKE %s 
+            ORDER BY id DESC
+        """, (f'%{query}%', f'%{query}%'))
         rows = cursor.fetchall()
+        cursor.close()
         conn.close()
         
         products = []
         for r in rows:
             products.append({
-                'id': r[0], 'title': r[1], 'price': r[2], 'metal': r[3], 'wood': r[4], 'filler': r[5],
-                'category': r[6], 'is_new': bool(r[7]), 'desc': r[8], 'main_image': r[9] if r[9] else '',
-                'gallery_images': r[10].split(',') if r[10] else []
+                'id': r['id'], 'title': r['title'], 'price': r['price'], 'metal': r['metal'], 'wood': r['wood'], 'filler': r['filler'],
+                'category': r['category'], 'is_new': bool(r['is_new']), 'desc': r['desc_text'], 'main_image': r['main_image'] if r['main_image'] else '',
+                'gallery_images': r['gallery_images'].split(',') if r['gallery_images'] else []
             })
     except Exception as e:
         print(f"Որոնման սխալ: {e}")
@@ -276,10 +289,11 @@ def submit_order():
     full_address = f"📍 Բնակավայր՝ {city} | 🚪 Տեսակ՝ {door_type} | 📐 Չափս՝ {size} | 📝 Նշումներ՝ {notes}"
     
     try:
-        conn = sqlite3.connect(DB_NAME)
+        conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO measurements (customer_name, phone_number, address) VALUES (?, ?, ?)', (name, phone, full_address))
+        cursor.execute('INSERT INTO measurements (customer_name, phone_number, address) VALUES (%s, %s, %s)', (name, phone, full_address))
         conn.commit()
+        cursor.close()
         conn.close()
     except Exception as e:
         print(f"Չափագրման բազայի սխալ. {e}")
@@ -311,13 +325,14 @@ def submit_cart_checkout():
     current_mode = session.get('site_mode', 'Test Mode')
 
     try:
-        conn = sqlite3.connect(DB_NAME)
+        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO orders (customer_name, phone_number, products, total_amount, mode) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO orders (customer_name, phone_number, products, total_amount, mode) VALUES (%s, %s, %s, %s, %s)",
             (name, phone, full_details, total_price, current_mode)
         )
         conn.commit()
+        cursor.close()
         conn.close()
     except Exception as e:
         print(f"Բազայի սխալ պատվերի ժամանակ. {e}")
@@ -331,7 +346,7 @@ def submit_cart_checkout():
 
 @app.route('/admin')
 def admin_panel():
-    conn = sqlite3.connect(DB_NAME)
+    conn = get_db_connection()
     cursor = conn.cursor()
     
     cursor.execute("SELECT id, customer_name, phone_number, address, date_created FROM measurements ORDER BY id DESC")
@@ -339,6 +354,7 @@ def admin_panel():
     
     cursor.execute("SELECT id, customer_name, phone_number, products, total_amount, mode, date FROM orders ORDER BY id DESC")
     orders = cursor.fetchall()
+    cursor.close()
     conn.close()
     
     products = get_all_products_from_db()
@@ -347,7 +363,7 @@ def admin_panel():
 @app.route('/admin/add_product', methods=['POST'])
 def add_product():
     title = request.form.get('title')
-    price = request.form.get('price')
+    price = int(request.form.get('price'))
     category = request.form.get('category')
     metal = request.form.get('metal', '')
     wood = request.form.get('wood', '')
@@ -359,14 +375,15 @@ def add_product():
     is_new = 1
         
     try:
-        conn = sqlite3.connect(DB_NAME)
+        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            """INSERT INTO products (title, price, metal, wood, filler, category, is_new, desc, main_image, gallery_images) 
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            """INSERT INTO products (title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images) 
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
             (title, price, metal, wood, filler, category, is_new, desc, main_image, gallery_images)
         )
         conn.commit()
+        cursor.close()
         conn.close()
     except Exception as e:
         print(f"Ապրանք ավելացնելու սխալ: {e}")
@@ -376,10 +393,11 @@ def add_product():
 @app.route('/admin/delete-product/<int:product_id>', methods=['POST', 'GET'])
 def delete_product(product_id):
     try:
-        conn = sqlite3.connect(DB_NAME)
+        conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM products WHERE id = ?", (product_id,))
+        cursor.execute("DELETE FROM products WHERE id = %s", (product_id,))
         conn.commit()
+        cursor.close()
         conn.close()
     except Exception as e:
         print(f"Ապրանք ջնջելու սխալ: {e}")
