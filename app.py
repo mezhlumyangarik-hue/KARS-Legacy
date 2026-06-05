@@ -7,20 +7,15 @@ app = Flask(__name__)
 app.secret_key = 'mezhlumyan_doors_ultra_secret_key_999'
 
 # ==========================================
-# 🔒 ՀԱՍՏԱՏՈՒՆ ՊԱՀՊԱՆՄԱՆ ԿԱՐԳԱՎՈՐՈՒՄ (PERSISTENT STORAGE)
+# 📂 ՃԻՇՏ ՃԱՆԱՊԱՐՀՆԵՐ (RENDER-Ի ՀԱՄԱՐ)
 # ==========================================
-# Եթե աշխատում է Render-ի վրա, օգտագործում է /var/data, հակառակ դեպքում՝ պրոյեկտի հիմնական պապկան
-if os.environ.get('RENDER'):
-    PERSISTENT_STORAGE = '/var/data'
-else:
-    PERSISTENT_STORAGE = os.path.dirname(os.path.abspath(__file__))
+# Բոլոր ֆայլերը պահում ենք պրոյեկտի հիմնական թղթապանակում
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Բազայի և նկարների ճիշտ ճանապարհները
-DB_NAME = os.path.join(PERSISTENT_STORAGE, 'doors_database.db')
-UPLOAD_FOLDER = os.path.join(PERSISTENT_STORAGE, 'static', 'uploads')
+DB_NAME = os.path.join(BASE_DIR, 'doors_database.db')
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
 
-DB_NAME = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'doors_database.db')
-#os.makedirs(os.path.dirname(DB_NAME), exist_ok=True)
+# Ստեղծում ենք uploads պապկան, եթե դեռ չկա
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
