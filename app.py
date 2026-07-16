@@ -8,10 +8,11 @@ app = Flask(__name__)
 app.secret_key = 'mezhlumyan_doors_ultra_secret_key_999'
 
 # ==========================================
-# 📂 ՃԻՇՏ ՃԱՆԱՊԱՐՀՆԵՐ (RENDER-Ի ՀԱՄԱՐ)
+# 📂 ՃԻՇՏ ՃԱՆԱՊԱՐՀՆԵՐ (VERCEL-Ի ՀԱՄԱՐ)
 # ==========================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
+# Vercel-ում թույլատրելի միակ գրվող թղթապանակը /tmp-ն է, բայց այն ժամանակավոր է
+UPLOAD_FOLDER = os.path.join('/tmp' if os.environ.get('VERCEL') else BASE_DIR, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -21,62 +22,64 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_db_connection():
-    # Կապվում է Render-ի Environment-ի հղումով Supabase բազային
+    # Կապվում է Render-ի կամ Vercel-ի Environment-ի հղումով Supabase բազային
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     return conn
 
-# 🛠️ ԲԱԶԱՅԻ ԱՂՅՈՒՍԱԿՆԵՐԻ ՍՏԵՂԾՈՒՄ (PostgreSQL ՍԻՆՏԱՔՍՈՎ)
+# 🛠️ ԲԱԶԱՅԻ ԱՂՅՈՒՍԱԿՆԵՐԻ ՍՏԵՂԾՈՒՄ (Միայն ձեռքով կանչելու համար, որ Vercel-ը չծանրաբեռնվի)
+@app.route('/init-database-secure-999')
 def init_db():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # 1. Ապրանքներ (desc-ի փոխարեն օգտագործում ենք desc_text)
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS products (
-            id SERIAL PRIMARY KEY,
-            title TEXT NOT NULL,
-            price INTEGER NOT NULL,
-            metal TEXT,
-            wood TEXT,
-            filler TEXT,
-            category TEXT,
-            is_new INTEGER,
-            desc_text TEXT,
-            main_image TEXT,
-            gallery_images TEXT
-        );
-    ''')
-    
-    # 2. Զամբյուղի Պատվերներ
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS orders (
-            id SERIAL PRIMARY KEY,
-            customer_name TEXT,
-            phone_number TEXT,
-            products TEXT,
-            total_amount REAL,
-            mode TEXT,
-            date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    ''')
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # 1. Ապրանքներ
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS products (
+                id SERIAL PRIMARY KEY,
+                title TEXT NOT NULL,
+                price INTEGER NOT NULL,
+                metal TEXT,
+                wood TEXT,
+                filler TEXT,
+                category TEXT,
+                is_new INTEGER,
+                desc_text TEXT,
+                main_image TEXT,
+                gallery_images TEXT
+            );
+        ''')
+        
+        # 2. Զամբյուղի Պատվերներ
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS orders (
+                id SERIAL PRIMARY KEY,
+                customer_name TEXT,
+                phone_number TEXT,
+                products TEXT,
+                total_amount REAL,
+                mode TEXT,
+                date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
 
-    # 3. Չափագրումներ
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS measurements (
-            id SERIAL PRIMARY KEY,
-            customer_name TEXT,
-            phone_number TEXT,
-            address TEXT,
-            date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    ''')
-    
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-# Ավտոմատ կանչում ենք աղյուսակների ստեղծումը Supabase-ում
-init_db()
+        # 3. Չափագրումներ
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS measurements (
+                id SERIAL PRIMARY KEY,
+                customer_name TEXT,
+                phone_number TEXT,
+                address TEXT,
+                date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return "Բազան հաջողությամբ թարմացվել է։"
+    except Exception as e:
+        return f"Սխալ բազան գործարկելիս: {e}"
 
 def get_all_products_from_db():
     try:
@@ -98,7 +101,7 @@ def get_all_products_from_db():
                 'filler': r['filler'],
                 'category': r['category'], 
                 'is_new': bool(r['is_new']), 
-                'desc': r['desc_text'],  # Պահում ենք 'desc' անունը HTML-ների համար
+                'desc': r['desc_text'],  
                 'main_image': r['main_image'] if r['main_image'] else '',
                 'gallery_images': r['gallery_images'].split(',') if r['gallery_images'] else []
             })
@@ -131,10 +134,15 @@ def upload_file():
         return jsonify({'error': 'Ֆայլ ընտրված չէ'}), 400
     
     if file:
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
-        return jsonify({'location': f'/static/uploads/{filename}'})
+        # Vercel-ի վրա ֆայլ գրելը սահմանափակ է, բայց փորձում ենք պահել ժամանակավոր թղթապանակում
+        try:
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            # Եթե տեղական է՝ տալիս ենք ստատիկ հղումը, եթե Vercel- է՝ ցանկալի է օգտագործել արտաքին URL-ներ
+            return jsonify({'location': f'/static/uploads/{filename}'})
+        except Exception as e:
+            return jsonify({'error': f'Vercel-ի սահմանափակման պատճառով հնարավոր չեղավ պահել նկարը սերվերում: {e}'}), 500
 
 # ==========================================
 # ԷՋԵՐԻ ԵՐԹՈՒՂԻՆԵՐ (ROUTES)
@@ -167,7 +175,6 @@ def search():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(cursor_factory=DictCursor)
-        # PostgreSQL-ում LIKE-ի փոխարեն ILIKE ենք անում, որ մեծատառ/փոքրատառ կապ չունենա
         cursor.execute("""
             SELECT id, title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images 
             FROM products 
@@ -413,5 +420,6 @@ def toggle_mode():
     session.modified = True
     return redirect(request.referrer or url_for('home'))
 
+# Սա ապահովում է, որ Vercel-ը կարողանա կանչել WSGI-ն
 if __name__ == '__main__':
     app.run(debug=True)
