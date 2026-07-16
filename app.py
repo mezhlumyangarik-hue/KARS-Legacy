@@ -11,7 +11,7 @@ app.secret_key = 'mezhlumyan_doors_ultra_secret_key_999'
 # 📂 ՃԻՇՏ ՃԱՆԱՊԱՐՀՆԵՐ (VERCEL-Ի ՀԱՄԱՐ)
 # ==========================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Vercel-ում թույլատրելի միակ գրվող թղթապանակը /tmp-ն է, բայց այն ժամանակավոր է
+# Vercel-ում թույլատրելի միակ գրվող թղթապանակը /tmp-ն է
 UPLOAD_FOLDER = os.path.join('/tmp' if os.environ.get('VERCEL') else BASE_DIR, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -22,11 +22,15 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_db_connection():
-    # Կապվում է Render-ի կամ Vercel-ի Environment-ի հղումով Supabase բազային
+    if not DATABASE_URL:
+        # Սա կանխում է տեղային սոկետին միանալու սխալը Vercel-ի վրա
+        raise ValueError("DATABASE_URL variable is missing in Environment Variables! Please add it in Vercel Settings.")
+    
+    # Կապվում է Supabase բազային՝ ապահով SSL ռեժիմով
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     return conn
 
-# 🛠️ ԲԱԶԱՅԻ ԱՂՅՈՒՍԱԿՆԵՐԻ ՍՏԵՂԾՈՒՄ (Միայն ձեռքով կանչելու համար, որ Vercel-ը չծանրաբեռնվի)
+# 🛠️ ԲԱԶԱՅԻ ԱՂՅՈՒՍԱԿՆԵՐԻ ՍՏԵՂԾՈՒՄ
 @app.route('/init-database-secure-999')
 def init_db():
     try:
@@ -118,7 +122,7 @@ def inject_cart_count():
         for item in cart.values():
             if isinstance(item, dict):
                 total_count += item.get('quantity', 0)
-    
+        
     site_mode = session.get('site_mode', 'Test Mode')
     return dict(cart_count=total_count, site_mode=site_mode)
 
@@ -134,12 +138,10 @@ def upload_file():
         return jsonify({'error': 'Ֆայլ ընտրված չէ'}), 400
     
     if file:
-        # Vercel-ի վրա ֆայլ գրելը սահմանափակ է, բայց փորձում ենք պահել ժամանակավոր թղթապանակում
         try:
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
-            # Եթե տեղական է՝ տալիս ենք ստատիկ հղումը, եթե Vercel- է՝ ցանկալի է օգտագործել արտաքին URL-ներ
             return jsonify({'location': f'/static/uploads/{filename}'})
         except Exception as e:
             return jsonify({'error': f'Vercel-ի սահմանափակման պատճառով հնարավոր չեղավ պահել նկարը սերվերում: {e}'}), 500
@@ -353,17 +355,21 @@ def submit_cart_checkout():
 
 @app.route('/admin')
 def admin_panel():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT id, customer_name, phone_number, address, date_created FROM measurements ORDER BY id DESC")
-    measurements = cursor.fetchall()
-    
-    cursor.execute("SELECT id, customer_name, phone_number, products, total_amount, mode, date FROM orders ORDER BY id DESC")
-    orders = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT id, customer_name, phone_number, address, date_created FROM measurements ORDER BY id DESC")
+        measurements = cursor.fetchall()
+        
+        cursor.execute("SELECT id, customer_name, phone_number, products, total_amount, mode, date FROM orders ORDER BY id DESC")
+        orders = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"Ադմին բազայի սխալ: {e}")
+        measurements, orders = [], []
+        
     products = get_all_products_from_db()
     return render_template('admin.html', measurements=measurements, orders=orders, products=products, doors_count=len(products))
 
@@ -420,6 +426,5 @@ def toggle_mode():
     session.modified = True
     return redirect(request.referrer or url_for('home'))
 
-# Սա ապահովում է, որ Vercel-ը կարողանա կանչել WSGI-ն
 if __name__ == '__main__':
     app.run(debug=True)
