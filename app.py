@@ -44,9 +44,9 @@ PERMANENT_PRODUCTS = [
         'category': 'Արտաքին Մետաղական',
         'is_new': True,
         'desc': 'Բարձր որակի արտաքին մուտքի մետաղական դուռ՝ ապակե հատվածով, երկար մոդեռն բռնակով և բարձր պաշտպանվածությամբ։',
-        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrYaEdZ0T2J_ilY9IK5Om6XCJYL4SJerOZ6eRDFFk0zA&s=10',
+        'main_image': 'blob:https://gemini.google.com/79ebab19-133d-4fda-b1f1-7b1ef248712a',
         'gallery_images': [
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrYaEdZ0T2J_ilY9IK5Om6XCJYL4SJerOZ6eRDFFk0zA&s=10'
+            'blob:https://gemini.google.com/79ebab19-133d-4fda-b1f1-7b1ef248712a'
         ]
     },
     {
@@ -59,9 +59,9 @@ PERMANENT_PRODUCTS = [
         'category': 'MDF Մուտքի Դուռ',
         'is_new': True,
         'desc': 'Շքեղ մուտքի դուռ՝ երկկողմանի ապակե ներդիրներով և դեկորատիվ մետաղական նախշերով։',
-        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCuzAgG3zo4HRWJoxI1lW6CQvVG-nVfWBwmQemT5JFP8ou9Y4wuryPi88&s=10',
+        'main_image': 'blob:https://gemini.google.com/f537535a-bf23-46ad-813f-f4bd80691c23',
         'gallery_images': [
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCuzAgG3zo4HRWJoxI1lW6CQvVG-nVfWBwmQemT5JFP8ou9Y4wuryPi88&s=10'
+            'blob:https://gemini.google.com/f537535a-bf23-46ad-813f-f4bd80691c23'
         ]
     },
     {
@@ -74,9 +74,9 @@ PERMANENT_PRODUCTS = [
         'category': 'Էքսկլյուզիվ Մուտքի Դուռ',
         'is_new': True,
         'desc': 'Ժամանակակից ուղղահայաց գծերով դիզայնով մուտքի դուռ՝ նախատեսված առանձնատների և բնակարանների համար։',
-        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy9MmS7LykInR7CWQ4G28Y3YBjltlOjMz81Mx4zREvMkvlH5bnoyIzowQ&s=10',
+        'main_image': 'blob:https://gemini.google.com/3bf595a6-f6ce-4914-879d-55444740f720',
         'gallery_images': [
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy9MmS7LykInR7CWQ4G28Y3YBjltlOjMz81Mx4zREvMkvlH5bnoyIzowQ&s=10'
+            'blob:https://gemini.google.com/3bf595a6-f6ce-4914-879d-55444740f720'
         ]
     }
 ]
