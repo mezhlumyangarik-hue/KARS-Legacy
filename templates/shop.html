@@ -25,7 +25,6 @@
         flex-wrap: wrap; 
         margin-bottom: 30px;
     }
-    /* Կոճակների հիմնական ստիլը */
     .cat-btn {
         text-decoration: none; 
         padding: 12px 24px; 
@@ -36,7 +35,6 @@
         letter-spacing: 0.5px;
         transition: all 0.3s ease;
     }
-    /* Չընտրված կոճակի տեսքը */
     .cat-btn-inactive {
         background: #111; 
         color: #aaa; 
@@ -48,7 +46,6 @@
         background: rgba(212, 175, 55, 0.05);
         box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
     }
-    /* Ակտիվ (Ընտրված) կոճակի տեսքը */
     .cat-btn-active {
         background: #d4af37; 
         color: #000;
@@ -61,7 +58,6 @@
     <h2 class="category-title">Ֆիլտրել ըստ <span>Տեսականու</span></h2>
     
     <div class="category-container">
-        
         <a href="{{ url_for('shop_page') }}" 
            class="cat-btn {% if not selected_category %}cat-btn-active{% else %}cat-btn-inactive{% endif %}">
            Բոլոր Դռները
@@ -81,7 +77,6 @@
            class="cat-btn {% if selected_category == 'single-wood' %}cat-btn-active{% else %}cat-btn-inactive{% endif %}">
            Մեկ կողմը Փայտ
         </a>
-
     </div>
     <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.04); max-width: 1200px; margin: 0 auto;">
 </div>
@@ -104,9 +99,9 @@
             <div style="position: relative; width: 100%; height: 420px; overflow: hidden; background: #161616;">
                 {% if product.main_image %}
                     {% if product.main_image.startswith('http') %}
-                        <img src="{{ product.main_image }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('shop-svg-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: fill; transition: 0.5s ease; display: block;">
+                        <img src="{{ product.main_image }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('shop-svg-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; display: block;">
                     {% else %}
-                        <img src="{{ url_for('static', filename='uploads/' + product.main_image) }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('shop-svg-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: fill; transition: 0.5s ease; display: block;">
+                        <img src="{{ url_for('static', filename='uploads/' + product.main_image) }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('shop-svg-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; display: block;">
                     {% endif %}
                 {% endif %}
                 
@@ -124,10 +119,15 @@
             <div style="padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
                     <span style="color: #666; font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 5px; font-weight: 600; letter-spacing: 0.5px;">
-                        {% if product.category == 'double-iron' %}Երկկողմանի Երկաթ
-                        {% elif product.category == 'double-wood' %}Երկկողմանի Փայտ / MDF
-                        {% elif product.category == 'single-wood' %}Մեկ կողմը Փայտ
-                        {% else %}{{ product.category }}{% endif %}
+                        {% if product.category == 'double-iron' %}
+                            Երկկողմանի Երկաթ
+                        {% elif product.category == 'double-wood' %}
+                            Երկկողմանի Փայտ / MDF
+                        {% elif product.category == 'single-wood' %}
+                            Մեկ կողմը Փայտ
+                        {% else %}
+                            {{ product.category }}
+                        {% endif %}
                     </span>
                     <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin: 0 0 10px 0;">
                         <a href="{{ url_for('product_detail', product_id=product.id) }}" style="color: #fff; text-decoration: none;">{{ product.title }}</a>
