@@ -31,55 +31,55 @@ def get_db_connection():
         return None
 
 # ==========================================
-# 💎 ՖԻՔՍՎԱԾ (ԱՆՋՆՋԵԼԻ) KARS LEGACY ԱՊՐԱՆՔՆԵՐ՝ ՄՇՏԱԿԱՆ ՆԿԱՐՆԵՐՈՎ
+# 💎 ՖԻՔՍՎԱԾ ՄՈՒՏՔԻ ՄԵՏԱՂԱԿԱՆ ԵՎ MDF ԴՌՆԵՐ (ԱՆԽԱՓԱՆ ՆԿԱՐՆԵՐՈՎ)
 # ==========================================
 PERMANENT_PRODUCTS = [
     {
         'id': 1001,
-        'title': 'KARS Armored Metal Grand 01',
+        'title': 'KARS Grand Armored Metal 01',
         'price': 280000,
         'metal': '3մմ Բարձրամուր Պողպատ',
         'wood': 'MDF Փայտյա Երեսպատում (Ընկույզ)',
         'filler': 'Բազալտե Ջերմամեկուսիչ Բամբակ',
         'category': 'Արտաքին Մետաղական',
         'is_new': True,
-        'desc': 'Բարձրամուր արտաքին երկաթյա դուռ՝ նախատեսված առանձնատների համար։ Ապահովված է բարձր որակի փականներով և ձայնամեկուսացմամբ։',
-        'main_image': 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+        'desc': 'Բարձրամուր արտաքին երկաթյա մուտքի դուռ՝ նախատեսված առանձնատների և բնակարանների համար։ Ապահովված է բարձր որակի փականներով, մետաղյա պաշտպանիչ շերտով և ձայնամեկուսացմամբ։',
+        'main_image': 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=800&q=80'
+            'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80',
+            'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=1000&q=80'
         ]
     },
     {
         'id': 1002,
-        'title': 'KARS Classic MDF Elegance',
-        'price': 145000,
-        'metal': 'Ամրացված Մետաղական Կարկաս',
-        'wood': 'Պրեմիում MDF Էմալ Պատվածք',
-        'filler': 'Բնական Փայտ / Ձայնամեկուսիչ Սալ',
-        'category': 'Միջսենյակային',
+        'title': 'KARS Premium MDF Entry Door',
+        'price': 195000,
+        'metal': 'Ամրացված Մետաղական Կարկաս 2.5մմ',
+        'wood': 'Պրեմիում MDF Էմալ / Ֆրեզերապատում',
+        'filler': 'Բնական Փայտ / Ջերմա-ձայնամեկուսիչ Սալ',
+        'category': 'MDF Մուտքի Դուռ',
         'is_new': True,
-        'desc': 'Ժամանակակից, էլեգանտ դիզայնով միջսենյակային դուռ՝ բնակարանների և գրասենյակների համար։',
-        'main_image': 'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=800&q=80',
+        'desc': 'Ժամանակակից MDF երեսպատմամբ մուտքի դուռ՝ բարձր խտության ձայնամեկուսացմամբ և փայտի նրբագեղ տեքստուրայով։',
+        'main_image': 'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=1000&q=80',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=800&q=80'
+            'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=1000&q=80',
+            'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1000&q=80'
         ]
     },
     {
         'id': 1003,
-        'title': 'KARS Modern Gold Edition',
-        'price': 195000,
-        'metal': '2.5մմ Պողպատյա Պրոֆիլ',
-        'wood': 'Բնական Փայտ / MDF',
-        'filler': 'Ջերմա-ձայնամեկուսիչ Սալ',
-        'category': 'Էքսկլյուզիվ',
+        'title': 'KARS Modern Steel & MDF Elite',
+        'price': 240000,
+        'metal': '3մմ Պողպատյա Պրոֆիլ',
+        'wood': 'Մոդեռն Բնական MDF Panel',
+        'filler': 'Բազալտե Սալ + Ձայնամեկուսիչ Շերտ',
+        'category': 'Էքսկլյուզիվ Մուտքի Դուռ',
         'is_new': True,
-        'desc': 'Էքսկլյուզիվ ոսկեգույն էլեմենտներով պրեմիում դասի դուռ, որը կապահովի Ձեր տան շքեղ տեսքն ու անվտանգությունը։',
-        'main_image': 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=800&q=80',
+        'desc': 'Էքսկլյուզիվ դիզայնով մետաղական և MDF համադրությամբ մուտքի դուռ, որն ապահովում է Ձեր տան շքեղ տեսքն ու բարձրագույն անվտանգությունը։',
+        'main_image': 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1000&q=80',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80'
+            'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1000&q=80',
+            'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80'
         ]
     }
 ]
