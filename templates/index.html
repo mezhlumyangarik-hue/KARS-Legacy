@@ -5,7 +5,7 @@
 <div class="luxury-carousel-container" style="position: relative; width: 100%; height: 70vh; overflow: hidden; background: #070707;">
     <div class="carousel-track" style="display: flex; width: 300%; height: 100%; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);">
         
-        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
+        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
             <div class="slide-content" style="max-width: 800px;">
                 <h2 style="font-size: 46px; color: #fff; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;">KARS Legacy <span style="color: #d4af37;">Դռներ</span></h2>
                 <p style="color: #ddd; font-size: 18px; margin-bottom: 30px; font-weight: 300;">Բարձրակարգ մետաղական և MDF դռների արտադրություն Գորիսում:</p>
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
+        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
             <div class="slide-content" style="max-width: 800px;">
                 <h2 style="font-size: 46px; color: #fff; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;">Անհատական <span style="color: #d4af37;">Պատվերներ</span></h2>
                 <p style="color: #ddd; font-size: 18px; margin-bottom: 30px; font-weight: 300;">Անվճար չափագրում, դիզայնի ընտրություն և պրոֆեսիոնալ տեղադրում Սյունիքում:</p>
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
+        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
             <div class="slide-content" style="max-width: 800px;">
                 <h2 style="font-size: 46px; color: #fff; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;">Որակ և <span style="color: #d4af37;">Երաշխիք</span></h2>
                 <p style="color: #ddd; font-size: 18px; margin-bottom: 30px; font-weight: 300;">Մեր պատրաստած յուրաքանչյուր դուռ ապահովում է Ձեր տան անվտանգությունն ու ջերմությունը:</p>
@@ -54,9 +54,13 @@
             
             <div style="position: absolute; top: 15px; left: 15px; background: linear-gradient(135deg, #d4af37, #aa7c11); color: #000; font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 20px; text-transform: uppercase; z-index: 3;">ՆՈՐՈՒՅԹ</div>
 
-            <div style="position: relative; width: 100%; height: 380px; overflow: hidden; background: #161616;">
+            <div style="position: relative; width: 100%; height: 420px; overflow: hidden; background: #161616;">
                 {% if product.main_image %}
-                    <img src="{{ url_for('static', filename='uploads/' + product.main_image) }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
+                    {% if product.main_image.startswith('http') %}
+                        <img src="{{ product.main_image }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: fill; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/' + product.main_image) }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: fill; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
+                    {% endif %}
                 {% endif %}
                 
                 <div id="svg-fallback-{{ product.id }}" class="svg-fallback-box {% if product.main_image %}has-image{% endif %}" style="width: 100%; height: 100%; align-items: center; justify-content: center; background: #161616;">
@@ -133,7 +137,7 @@
             
             <div class="portfolio-card" style="background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); transition: 0.3s;">
                 <div style="height: 350px; background: #1f1f1f;">
-                    <img src="{{ url_for('static', filename='image/portfolio1.jpg') }}" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.style.display='none'">
+                    <img src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=800" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                 </div>
                 <div style="padding: 20px;">
                     <span style="color: #d4af37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Արտաքին Երկաթյա Դուռ</span>
@@ -143,7 +147,7 @@
 
             <div class="portfolio-card" style="background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); transition: 0.3s;">
                 <div style="height: 350px; background: #1f1f1f;">
-                    <img src="{{ url_for('static', filename='image/portfolio2.jpg') }}" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.style.display='none'">
+                    <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=800" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                 </div>
                 <div style="padding: 20px;">
                     <span style="color: #d4af37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">MDF Միջսենյակային Դռներ</span>
@@ -153,7 +157,7 @@
 
             <div class="portfolio-card" style="background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); transition: 0.3s;">
                 <div style="height: 350px; background: #1f1f1f;">
-                    <img src="{{ url_for('static', filename='image/portfolio3.jpg') }}" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.style.display='none'">
+                    <img src="https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?q=80&w=800" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                 </div>
                 <div style="padding: 20px;">
                     <span style="color: #d4af37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Երկկողմանի Փայտ / Մետաղ</span>
@@ -173,7 +177,7 @@
             <h2 style="font-size: 34px; font-weight: 700; margin: 0 0 25px 0; text-transform: uppercase;">Առաքում և <span style="color: #d4af37;">Չափագրում</span></h2>
             
             <p style="color: #aaa; line-height: 1.7; font-size: 15px; margin-bottom: 30px;">
-                Մեր արտադրամասը գտնվում է **քաղաք Գորիսում**, սակայն մենք իրականացնում ենք անվճար չափագրում, առաքում և պրոֆեսիոնալ տեղադրում **ողջ Սյունիքի մարզում** (Գորիս, Կապան, Սիսիան, Մեղրի) և **քաղաք Երևանում**։
+                Մեր արտադրամասը գտնվում է <strong>քաղաք Գորիսում</strong>, սակայն մենք իրականացնում ենք անվճար չափագրում, առաքում և պրոֆեսիոնալ տեղադրում <strong>ողջ Սյունիքի մարզում</strong> (Գորիս, Կապան, Սիսիան, Մեղրի) և <strong>քաղաք Երևանում</strong>։
             </p>
 
             <div style="display: flex; flex-direction: column; gap: 15px;">
@@ -188,14 +192,14 @@
                     <span style="font-size: 20px; color: #d4af37;">📞</span>
                     <div>
                         <h4 style="margin: 0; font-size: 14px; color: #fff;">Հեռախոսահամար</h4>
-                        <p style="margin: 3px 0 0 0; font-size: 13px; color: #888;">+374 (96) 78-78-55/ +374 (98) 55-08-27</p>
+                        <p style="margin: 3px 0 0 0; font-size: 13px; color: #888;">+374 (96) 78-78-55 / +374 (98) 55-08-27</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <div style="flex: 1; min-width: 300px; height: 350px; background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.04);">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3077.4391433473256!2d46.3223163062951!3d39.52714636617131!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2sam!4v1780230370955!5m2!1sru!2sam" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://maps.google.com/maps?q=Goris,Armenia&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
 
     </div>
@@ -277,14 +281,13 @@
         color: #000 !important;
     }
     
-    /* 🌟 ԹԱՐՄԱՑՎԱԾ ԷՖԵԿՏՆԵՐԸ ՀԵՌՎԻՑ ՍԻՐՈՒՆ ԵՐԵՎԱԼՈՒ ՀԱՄԱՐ */
     .product-premium-card:hover {
         transform: translateY(-8px) !important;
         border-color: rgba(212, 175, 55, 0.4) !important;
         box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
     }
     .product-premium-card:hover img {
-        transform: scale(1.08) !important; /* Նկարը սիրուն առաջ կգա */
+        transform: scale(1.05) !important;
     }
     .why-card:hover, .portfolio-card:hover {
         background: #1a1a1a !important;
@@ -300,9 +303,6 @@
     }
     .btn-add-cart-main:hover {
         background: #fff;
-    }
-    footer a:hover {
-        color: #d4af37 !important;
     }
     .svg-fallback-box {
         display: flex;
