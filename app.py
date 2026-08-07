@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key = 'mezhlumyan_doors_ultra_secret_key_999'
 
 # ==========================================
-# 📂 ՃԻՇՏ ՃԱՆԱՊԱՐՀՆԵՐ (VERCEL-Ի ՀԱՄԱՐ)
+# 📂 VERCEL PATHS
 # ==========================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join('/tmp' if os.environ.get('VERCEL') else BASE_DIR, 'static', 'uploads')
@@ -16,7 +16,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # ==========================================
-# 🔗 ՄԻԱՑՈՒՄ SUPABASE POSTGRESQL ԲԱԶԱՅԻՆ
+# 🔗 SUPABASE POSTGRESQL CONNECT
 # ==========================================
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
@@ -27,65 +27,62 @@ def get_db_connection():
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         return conn
     except Exception as e:
-        print(f"Բազային միանալու սխալ: {e}")
+        print(f"Database connection error: {e}")
         return None
 
 # ==========================================
-# 💎 ՖԻՔՍՎԱԾ ՄՈՒՏՔԻ ԴՌՆԵՐ (ՃԻՇՏ, ԱՆԽԱՓԱՆ ԴՌՆԵՐԻ ՆԿԱՐՆԵՐՈՎ)
+# 💎 DZER DZERQOV TVATZ NKARNEROV PERMANENT PRODUCTS
 # ==========================================
 PERMANENT_PRODUCTS = [
     {
         'id': 1001,
         'title': 'KARS Grand Armored Metal 01',
         'price': 280000,
-        'metal': '3մմ Բարձրամուր Պողպատ',
-        'wood': 'MDF Փայտյա Երեսպատում (Ընկույզ)',
-        'filler': 'Բազալտե Ջերմամեկուսիչ Բամբակ',
-        'category': 'Արտաքին Մետաղական',
+        'metal': '3mm Steel',
+        'wood': 'MDF (Walnut)',
+        'filler': 'Basalt Insulation',
+        'category': 'External Metal',
         'is_new': True,
-        'desc': 'Բարձրամուր արտաքին երկաթյա մուտքի դուռ՝ նախատեսված առանձնատների և բնակարանների համար։ Ապահովված է բարձր որակի փականներով և ձայնամեկուսացմամբ։',
-        'main_image': 'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=800&q=80',
+        'desc': 'High quality external entrance metal door with advanced security locks and soundproofing.',
+        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrYaEdZ0T2J_ilY9IK5Om6XCJYL4SJerOZ6eRDFFk0zA&s=10',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=800&q=80'
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrYaEdZ0T2J_ilY9IK5Om6XCJYL4SJerOZ6eRDFFk0zA&s=10'
         ]
     },
     {
         'id': 1002,
         'title': 'KARS Premium MDF Entry Door',
         'price': 195000,
-        'metal': 'Ամրացված Մետաղական Կարկաս 2.5մմ',
-        'wood': 'Պրեմիում MDF Էմալ / Ֆրեզերապատում',
-        'filler': 'Բնական Փայտ / Ջերմա-ձայնամեկուսիչ Սալ',
-        'category': 'MDF Մուտքի Դուռ',
+        'metal': '2.5mm Metal Frame',
+        'wood': 'Premium MDF Enamel',
+        'filler': 'Sound Insulation Board',
+        'category': 'MDF Entry Door',
         'is_new': True,
-        'desc': 'Ժամանակակից MDF երեսպատմամբ մուտքի դուռ՝ բարձր խտության ձայնամեկուսացմամբ և փայտի նրբագեղ տեքստուրայով։',
-        'main_image': 'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=800&q=80',
+        'desc': 'Modern entrance door with premium MDF coating and elegant wood texture.',
+        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCuzAgG3zo4HRWJoxI1lW6CQvVG-nVfWBwmQemT5JFP8ou9Y4wuryPi88&s=10',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?auto=format&fit=crop&w=800&q=80'
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCuzAgG3zo4HRWJoxI1lW6CQvVG-nVfWBwmQemT5JFP8ou9Y4wuryPi88&s=10'
         ]
     },
     {
         'id': 1003,
         'title': 'KARS Modern Steel & MDF Elite',
         'price': 240000,
-        'metal': '3մմ Պողպատյա Պրոֆիլ',
-        'wood': 'Մոդեռն Բնական MDF Panel',
-        'filler': 'Բազալտե Սալ + Ձայնամեկուսիչ Շերտ',
-        'category': 'Էքսկլյուզիվ Մուտքի Դուռ',
+        'metal': '3mm Steel Profile',
+        'wood': 'Modern Natural MDF Panel',
+        'filler': 'Basalt Board',
+        'category': 'Exclusive Entry Door',
         'is_new': True,
-        'desc': 'Էքսկլյուզիվ դիզայնով մետաղական և MDF համադրությամբ մուտքի դուռ, որն ապահովում է Ձեր տան շքեղ տեսքն ու բարձրագույն անվտանգությունը։',
-        'main_image': 'https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?auto=format&fit=crop&w=800&q=80',
+        'desc': 'Exclusive design door combining high strength metal and elegant MDF panels.',
+        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy9MmS7LykInR7CWQ4G28Y3YBjltlOjMz81Mx4zREvMkvlH5bnoyIzowQ&s=10',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=800&q=80'
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy9MmS7LykInR7CWQ4G28Y3YBjltlOjMz81Mx4zREvMkvlH5bnoyIzowQ&s=10'
         ]
     }
 ]
 
 def get_all_products_from_db():
-    products = list(PERMANENT_PRODUCTS) # Միշտ ներառում է ֆիքսված ապրանքները
+    products = list(PERMANENT_PRODUCTS)
     
     conn = get_db_connection()
     if conn:
@@ -111,17 +108,16 @@ def get_all_products_from_db():
                     'gallery_images': r['gallery_images'].split(',') if r['gallery_images'] else []
                 })
         except Exception as e:
-            print(f"Բազայից կարդալու սխալ: {e}")
+            print(f"DB read error: {e}")
             
     return products
 
-# 🛠️ ԲԱԶԱՅԻ ԱՂՅՈՒՍԱԿՆԵՐԻ ՍՏԵՂԾՈՒՄ
 @app.route('/init-database-secure-999')
 def init_db():
     try:
         conn = get_db_connection()
         if not conn:
-            return "DATABASE_URL-ը բացակայում է կամ սխալ է:"
+            return "DATABASE_URL missing"
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -165,9 +161,9 @@ def init_db():
         conn.commit()
         cursor.close()
         conn.close()
-        return "Բազան հաջողությամբ թարմացվել է:"
+        return "Database initialized successfully"
     except Exception as e:
-        return f"Սխալ բազան գործարկելիս: {e}"
+        return f"Database init error: {e}"
 
 @app.context_processor
 def inject_cart_count():
@@ -181,16 +177,13 @@ def inject_cart_count():
     site_mode = session.get('site_mode', 'Test Mode')
     return dict(cart_count=total_count, site_mode=site_mode)
 
-# ==========================================
-# 🌟 ՆԿԱՐՆԵՐԻ ՎԵՐԲԵՌՆՄԱՆ ԵՐԹՈՒՂԻ
-# ==========================================
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
-        return jsonify({'error': 'Ֆայլը չի գտնվել'}), 400
+        return jsonify({'error': 'File not found'}), 400
     file = request.files['file']
     if file.filename == '':
-        return jsonify({'error': 'Ֆայլ ընտրված չէ'}), 400
+        return jsonify({'error': 'No file selected'}), 400
     
     if file:
         try:
@@ -199,11 +192,7 @@ def upload_file():
             file.save(filepath)
             return jsonify({'location': f'/static/uploads/{filename}'})
         except Exception as e:
-            return jsonify({'error': f'Սխալ նկարը պահպանելիս: {e}'}), 500
-
-# ==========================================
-# ԷՋԵՐԻ ԵՐԹՈՒՂԻՆԵՐ (ROUTES)
-# ==========================================
+            return jsonify({'error': f'Save error: {e}'}), 500
 
 @app.route('/')
 def home():
@@ -261,10 +250,6 @@ def checkout_page():
 def orders_page():
     return render_template('orders.html')
 
-# ==========================================
-# ԶԱՄԲՅՈՒՂԻ ՖՈՒՆԿՑԻԱՆԵՐ
-# ==========================================
-
 @app.route('/add-to-cart/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id):
     all_doors = get_all_products_from_db()
@@ -317,20 +302,16 @@ def clear_cart():
     session.modified = True
     return redirect(url_for('cart_page'))
 
-# ==========================================
-# ՀԱՅՏԵՐԻ ԳՐԱՆՑՈՒՄ
-# ==========================================
-
 @app.route('/submit-order', methods=['POST'])
 def submit_order():
-    name = request.form.get('name') or 'Անոնիմ'
-    phone = request.form.get('phone') or 'Նշված չէ'
-    city = request.form.get('city', 'Գորիս')
-    door_type = request.form.get('door_type', 'Նշված չէ')
-    size = request.form.get('size', 'Չափսը նշված չէ')
+    name = request.form.get('name') or 'Anonymous'
+    phone = request.form.get('phone') or 'Not specified'
+    city = request.form.get('city', 'Goris')
+    door_type = request.form.get('door_type', 'Not specified')
+    size = request.form.get('size', 'Not specified')
     notes = request.form.get('notes', '')
     
-    full_address = f"📍 Բնակավայր՝ {city} | 🚪 Տեսակ՝ {door_type} | 📐 Չափս՝ {size} | 📝 Նշումներ՝ {notes}"
+    full_address = f"City: {city} | Type: {door_type} | Size: {size} | Notes: {notes}"
     
     conn = get_db_connection()
     if conn:
@@ -341,15 +322,15 @@ def submit_order():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Չափագրման բազայի սխալ. {e}")
+            print(f"Measurement DB error: {e}")
         
-    return render_template('success.html', title="📩 Հայտն Ընդունված Է", text="Ձեր չափագրման հայտը հաջողությամբ գրանցվել է։")
+    return render_template('success.html', title="Submitted", text="Your request has been submitted successfully.")
 
 @app.route('/submit-cart-checkout', methods=['POST'])
 def submit_cart_checkout():
-    name = request.form.get('name') or request.form.get('customer_name') or 'Անոնիմ'
-    phone = request.form.get('phone') or request.form.get('phone_number') or 'Նշված չէ'
-    city = request.form.get('city', 'Գորիս')
+    name = request.form.get('name') or request.form.get('customer_name') or 'Anonymous'
+    phone = request.form.get('phone') or request.form.get('phone_number') or 'Not specified'
+    city = request.form.get('city', 'Goris')
     notes = request.form.get('notes', '')
 
     cart = session.get('cart', {})
@@ -361,12 +342,12 @@ def submit_cart_checkout():
             price = int(str(item['price']).replace(',', '').replace(' ', ''))
             qty = int(item.get('quantity', 1))
             total_price += price * qty
-            cart_summary.append(f"{item['title']} ({qty} հատ)")
+            cart_summary.append(f"{item['title']} ({qty} pcs)")
         except:
             pass
 
-    products_text = ", ".join(cart_summary) if cart_summary else "Դատարկ զամբյուղ"
-    full_details = f"📦 Ապրանքներ: {products_text} | 📍 Բնակավայր: {city} | 📝 Նշումներ: {notes}"
+    products_text = ", ".join(cart_summary) if cart_summary else "Empty Cart"
+    full_details = f"Products: {products_text} | City: {city} | Notes: {notes}"
     current_mode = session.get('site_mode', 'Test Mode')
 
     conn = get_db_connection()
@@ -381,14 +362,10 @@ def submit_cart_checkout():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Բազայի սխալ պատվերի ժամանակ. {e}")
+            print(f"Order DB error: {e}")
 
     session.pop('cart', None)
-    return render_template('success.html', title="📩 Պատվերը Գրանցվեց", text="Շնորհակալություն! Ձեր պատվերը հաջողությամբ ընդունվել է։")
-
-# ==========================================
-# ԱԴՄԻՆ ՊԱՆԵԼ
-# ==========================================
+    return render_template('success.html', title="Order Submitted", text="Thank you! Your order has been placed.")
 
 @app.route('/admin')
 def admin_panel():
@@ -404,7 +381,7 @@ def admin_panel():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Ադմին բազայի սխալ: {e}")
+            print(f"Admin DB error: {e}")
         
     products = get_all_products_from_db()
     return render_template('admin.html', measurements=measurements, orders=orders, products=products, doors_count=len(products))
@@ -436,7 +413,7 @@ def add_product():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Ապրանք ավելացնելու սխալ: {e}")
+            print(f"Add product error: {e}")
             
     return redirect(url_for('admin_panel'))
 
@@ -451,7 +428,7 @@ def delete_product(product_id):
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Ապրանք ջնջելու սխալ: {e}")
+            print(f"Delete product error: {e}")
     return redirect(url_for('admin_panel'))
 
 @app.route('/toggle-mode')
