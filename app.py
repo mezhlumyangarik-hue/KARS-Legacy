@@ -31,7 +31,7 @@ def get_db_connection():
         return None
 
 # ==========================================
-# 💎 ՖԻՔՍՎԱԾ ՄՈՒՏՔԻ ՄԵՏԱՂԱԿԱՆ ԵՎ MDF ԴՌՆԵՐ (ԱՆԽԱՓԱՆ ՆԿԱՐՆԵՐՈՎ)
+# 💎 ՖԻՔՍՎԱԾ ՄՈՒՏՔԻ ԴՌՆԵՐ (ՃԻՇՏ, ԱՆԽԱՓԱՆ ԴՌՆԵՐԻ ՆԿԱՐՆԵՐՈՎ)
 # ==========================================
 PERMANENT_PRODUCTS = [
     {
@@ -43,11 +43,11 @@ PERMANENT_PRODUCTS = [
         'filler': 'Բազալտե Ջերմամեկուսիչ Բամբակ',
         'category': 'Արտաքին Մետաղական',
         'is_new': True,
-        'desc': 'Բարձրամուր արտաքին երկաթյա մուտքի դուռ՝ նախատեսված առանձնատների և բնակարանների համար։ Ապահովված է բարձր որակի փականներով, մետաղյա պաշտպանիչ շերտով և ձայնամեկուսացմամբ։',
-        'main_image': 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80',
+        'desc': 'Բարձրամուր արտաքին երկաթյա մուտքի դուռ՝ նախատեսված առանձնատների և բնակարանների համար։ Ապահովված է բարձր որակի փականներով և ձայնամեկուսացմամբ։',
+        'main_image': 'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=800&q=80',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80',
-            'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=1000&q=80'
+            'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=800&q=80'
         ]
     },
     {
@@ -60,10 +60,10 @@ PERMANENT_PRODUCTS = [
         'category': 'MDF Մուտքի Դուռ',
         'is_new': True,
         'desc': 'Ժամանակակից MDF երեսպատմամբ մուտքի դուռ՝ բարձր խտության ձայնամեկուսացմամբ և փայտի նրբագեղ տեքստուրայով։',
-        'main_image': 'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=1000&q=80',
+        'main_image': 'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=800&q=80',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=1000&q=80',
-            'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1000&q=80'
+            'https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?auto=format&fit=crop&w=800&q=80'
         ]
     },
     {
@@ -76,10 +76,10 @@ PERMANENT_PRODUCTS = [
         'category': 'Էքսկլյուզիվ Մուտքի Դուռ',
         'is_new': True,
         'desc': 'Էքսկլյուզիվ դիզայնով մետաղական և MDF համադրությամբ մուտքի դուռ, որն ապահովում է Ձեր տան շքեղ տեսքն ու բարձրագույն անվտանգությունը։',
-        'main_image': 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1000&q=80',
+        'main_image': 'https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?auto=format&fit=crop&w=800&q=80',
         'gallery_images': [
-            'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1000&q=80',
-            'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80'
+            'https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=800&q=80'
         ]
     }
 ]
