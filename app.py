@@ -11,7 +11,6 @@ app.secret_key = 'mezhlumyan_doors_ultra_secret_key_999'
 # 📂 ՃԻՇՏ ՃԱՆԱՊԱՐՀՆԵՐ (VERCEL-Ի ՀԱՄԱՐ)
 # ==========================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Vercel-ում թույլատրելի միակ գրվող թղթապանակը /tmp-ն է
 UPLOAD_FOLDER = os.path.join('/tmp' if os.environ.get('VERCEL') else BASE_DIR, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -23,72 +22,99 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_db_connection():
     if not DATABASE_URL:
-        # Սա կանխում է տեղային սոկետին միանալու սխալը Vercel-ի վրա
-        raise ValueError("DATABASE_URL variable is missing in Environment Variables! Please add it in Vercel Settings.")
-    
-    # Կապվում է Supabase բազային՝ ապահով SSL ռեժիմով
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    return conn
+        return None
+    try:
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        return conn
+    except Exception as e:
+        print(f"Բազային միանալու սխալ: {e}")
+        return None
 
-# 🛠️ ԲԱԶԱՅԻ ՍԿԶԲՆԱԿԱՆ ԱՊՐԱՆՔՆԵՐԻ ԱՎԵԼԱՑՈՒՄ (KARS LEGACY DEFAULT PRODUCTS)
-def seed_default_products(cursor):
-    cursor.execute("SELECT COUNT(*) FROM products")
-    count = cursor.fetchone()[0]
+# ==========================================
+# 💎 ՖԻՔՍՎԱԾ (ԱՆՋՆՋԵԼԻ) KARS LEGACY ԱՊՐԱՆՔՆԵՐ
+# ==========================================
+PERMANENT_PRODUCTS = [
+    {
+        'id': 1001,
+        'title': 'KARS Armored Metal Grand 01',
+        'price': 280000,
+        'metal': '3մմ Բարձրամուր Պողպատ',
+        'wood': 'MDF Փայտյա Երեսպատում (Ընկույզ)',
+        'filler': 'Բազալտե Ջերմամեկուսիչ Բամբակ',
+        'category': 'Արտաքին Մետաղական',
+        'is_new': True,
+        'desc': 'Բարձրամուր արտաքին երկաթյա դուռ՝ նախատեսված առանձնատների համար։ Ապահովված է բարձր որակի փականներով և ձայնամեկուսացմամբ։',
+        'main_image': '',
+        'gallery_images': []
+    },
+    {
+        'id': 1002,
+        'title': 'KARS Classic MDF Elegance',
+        'price': 145000,
+        'metal': 'Ամրացված Մետաղական Կարկաս',
+        'wood': 'Պրեմիում MDF Էմալ Պատվածք',
+        'filler': 'Բնական Փայտ / Ձայնամեկուսիչ Սալ',
+        'category': 'Միջսենյակային',
+        'is_new': True,
+        'desc': 'Ժամանակակից, էլեգանտ դիզայնով միջսենյակային դուռ՝ բնակարանների և գրասենյակների համար։',
+        'main_image': '',
+        'gallery_images': []
+    },
+    {
+        'id': 1003,
+        'title': 'KARS Modern Gold Edition',
+        'price': 195000,
+        'metal': '2.5մմ Պողպատյա Պրոֆիլ',
+        'wood': 'Բնական Փայտ / MDF',
+        'filler': 'Ջերմա-ձայնամեկուսիչ Սալ',
+        'category': 'Էքսկլյուզիվ',
+        'is_new': True,
+        'desc': 'Էքսկլյուզիվ ոսկեգույն էլեմենտներով պրեմիում դասի դուռ, որը կապահովի Ձեր տան շքեղ տեսքն ու անվտանգությունը։',
+        'main_image': '',
+        'gallery_images': []
+    }
+]
+
+def get_all_products_from_db():
+    products = list(PERMANENT_PRODUCTS) # Միշտ ներառում է ֆիքսված ապրանքները
     
-    # Եթե ապրանքների աղյուսակը դատարկ է, լցնում ենք սկզբնական KARS Legacy ապրանքները
-    if count == 0:
-        default_products = [
-            (
-                "KARS Legacy Armored Metal 01", 
-                250000, 
-                "3մմ Բարձրամուր Պողպատ", 
-                "MDF Փայտյա Երեսպատում", 
-                "Բազալտե Ջերմամեկուսիչ Բամբակ", 
-                "Արտաքին Մետաղական", 
-                1, 
-                "Էքսկլյուզիվ արտաքին մետաղական դուռ՝ բարձր պաշտպանվածությամբ և ձայնամեկուսացմամբ:", 
-                "", 
-                ""
-            ),
-            (
-                "KARS Classic MDF Interior", 
-                120000, 
-                "Ամրացված Մետաղական Կարկաս", 
-                "Պրեմիում MDF Էմալ", 
-                "Փայտե Լցանյութ", 
-                "Միջսենյակային", 
-                1, 
-                "Ժամանակակից ոճի միջսենյակային դուռ՝ նախատեսված բնակարանների և առանձնատների համար:", 
-                "", 
-                ""
-            ),
-            (
-                "KARS Modern Gold Line", 
-                185000, 
-                "2.5մմ Պողպատյա Պրոֆիլ", 
-                "Բնական Փայտ / MDF", 
-                "Ջերմա-ձայնամեկուսիչ Սալ", 
-                "Էքսկլյուզիվ", 
-                1, 
-                "Ոսկեգույն էլեմենտներով և ժամանակակից դիզայնով բարձրորակ դուռ:", 
-                "", 
-                ""
-            )
-        ]
-        
-        cursor.executemany("""
-            INSERT INTO products (title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, default_products)
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor(cursor_factory=DictCursor)
+            cursor.execute("SELECT id, title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images FROM products ORDER BY id DESC")
+            rows = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            
+            for r in rows:
+                products.append({
+                    'id': r['id'], 
+                    'title': r['title'], 
+                    'price': r['price'], 
+                    'metal': r['metal'], 
+                    'wood': r['wood'], 
+                    'filler': r['filler'],
+                    'category': r['category'], 
+                    'is_new': bool(r['is_new']), 
+                    'desc': r['desc_text'],  
+                    'main_image': r['main_image'] if r['main_image'] else '',
+                    'gallery_images': r['gallery_images'].split(',') if r['gallery_images'] else []
+                })
+        except Exception as e:
+            print(f"Բազայից կարդալու սխալ: {e}")
+            
+    return products
 
 # 🛠️ ԲԱԶԱՅԻ ԱՂՅՈՒՍԱԿՆԵՐԻ ՍՏԵՂԾՈՒՄ
 @app.route('/init-database-secure-999')
 def init_db():
     try:
         conn = get_db_connection()
+        if not conn:
+            return "DATABASE_URL-ը բացակայում է կամ սխալ է:"
         cursor = conn.cursor()
         
-        # 1. Ապրանքներ
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS products (
                 id SERIAL PRIMARY KEY,
@@ -105,7 +131,6 @@ def init_db():
             );
         ''')
         
-        # 2. Զամբյուղի Պատվերներ
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS orders (
                 id SERIAL PRIMARY KEY,
@@ -118,7 +143,6 @@ def init_db():
             );
         ''')
 
-        # 3. Չափագրումներ
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS measurements (
                 id SERIAL PRIMARY KEY,
@@ -129,44 +153,12 @@ def init_db():
             );
         ''')
         
-        # Սկզբնական ապրանքների ավելացում
-        seed_default_products(cursor)
-        
         conn.commit()
         cursor.close()
         conn.close()
-        return "Բազան հաջողությամբ թարմացվել է և KARS Legacy ապրանքները ավելացվել են։"
+        return "Բազան հաջողությամբ թարմացվել է:"
     except Exception as e:
         return f"Սխալ բազան գործարկելիս: {e}"
-
-def get_all_products_from_db():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(cursor_factory=DictCursor)
-        cursor.execute("SELECT id, title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images FROM products ORDER BY id DESC")
-        rows = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        
-        products = []
-        for r in rows:
-            products.append({
-                'id': r['id'], 
-                'title': r['title'], 
-                'price': r['price'], 
-                'metal': r['metal'], 
-                'wood': r['wood'], 
-                'filler': r['filler'],
-                'category': r['category'], 
-                'is_new': bool(r['is_new']), 
-                'desc': r['desc_text'],  
-                'main_image': r['main_image'] if r['main_image'] else '',
-                'gallery_images': r['gallery_images'].split(',') if r['gallery_images'] else []
-            })
-        return products
-    except Exception as e:
-        print(f"Բազայից կարդալու սխալ: {e}")
-        return []
 
 @app.context_processor
 def inject_cart_count():
@@ -198,7 +190,7 @@ def upload_file():
             file.save(filepath)
             return jsonify({'location': f'/static/uploads/{filename}'})
         except Exception as e:
-            return jsonify({'error': f'Vercel-ի սահմանափակման պատճառով հնարավոր չեղավ պահել նկարը սերվերում: {e}'}), 500
+            return jsonify({'error': f'Սխալ նկարը պահպանելիս: {e}'}), 500
 
 # ==========================================
 # ԷՋԵՐԻ ԵՐԹՈՒՂԻՆԵՐ (ROUTES)
@@ -208,7 +200,6 @@ def upload_file():
 def home():
     all_doors = get_all_products_from_db()
     new_doors = [door for door in all_doors if door['is_new']]
-    # Եթե նորույթ դրված չէ, ցույց է տալիս բոլոր ապրանքները
     display_products = new_doors if new_doors else all_doors
     return render_template('index.html', products=display_products)
 
@@ -226,33 +217,12 @@ def shop_page():
 
 @app.route('/search')
 def search():
-    query = request.args.get('query', '').strip()
+    query = request.args.get('query', '').strip().lower()
     if not query:
         return redirect(url_for('shop_page'))
         
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(cursor_factory=DictCursor)
-        cursor.execute("""
-            SELECT id, title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images 
-            FROM products 
-            WHERE title ILIKE %s OR desc_text ILIKE %s 
-            ORDER BY id DESC
-        """, (f'%{query}%', f'%{query}%'))
-        rows = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        
-        products = []
-        for r in rows:
-            products.append({
-                'id': r['id'], 'title': r['title'], 'price': r['price'], 'metal': r['metal'], 'wood': r['wood'], 'filler': r['filler'],
-                'category': r['category'], 'is_new': bool(r['is_new']), 'desc': r['desc_text'], 'main_image': r['main_image'] if r['main_image'] else '',
-                'gallery_images': r['gallery_images'].split(',') if r['gallery_images'] else []
-            })
-    except Exception as e:
-        print(f"Որոնման սխալ: {e}")
-        products = []
+    all_doors = get_all_products_from_db()
+    products = [d for d in all_doors if query in d['title'].lower() or query in d['desc'].lower()]
         
     return render_template('shop.html', products=products, search_query=query)
 
@@ -353,15 +323,16 @@ def submit_order():
     
     full_address = f"📍 Բնակավայր՝ {city} | 🚪 Տեսակ՝ {door_type} | 📐 Չափս՝ {size} | 📝 Նշումներ՝ {notes}"
     
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO measurements (customer_name, phone_number, address) VALUES (%s, %s, %s)', (name, phone, full_address))
-        conn.commit()
-        cursor.close()
-        conn.close()
-    except Exception as e:
-        print(f"Չափագրման բազայի սխալ. {e}")
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO measurements (customer_name, phone_number, address) VALUES (%s, %s, %s)', (name, phone, full_address))
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except Exception as e:
+            print(f"Չափագրման բազայի սխալ. {e}")
         
     return render_template('success.html', title="📩 Հայտն Ընդունված Է", text="Ձեր չափագրման հայտը հաջողությամբ գրանցվել է։")
 
@@ -389,18 +360,19 @@ def submit_cart_checkout():
     full_details = f"📦 Ապրանքներ: {products_text} | 📍 Բնակավայր: {city} | 📝 Նշումներ: {notes}"
     current_mode = session.get('site_mode', 'Test Mode')
 
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO orders (customer_name, phone_number, products, total_amount, mode) VALUES (%s, %s, %s, %s, %s)",
-            (name, phone, full_details, total_price, current_mode)
-        )
-        conn.commit()
-        cursor.close()
-        conn.close()
-    except Exception as e:
-        print(f"Բազայի սխալ պատվերի ժամանակ. {e}")
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO orders (customer_name, phone_number, products, total_amount, mode) VALUES (%s, %s, %s, %s, %s)",
+                (name, phone, full_details, total_price, current_mode)
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except Exception as e:
+            print(f"Բազայի սխալ պատվերի ժամանակ. {e}")
 
     session.pop('cart', None)
     return render_template('success.html', title="📩 Պատվերը Գրանցվեց", text="Շնորհակալություն! Ձեր պատվերը հաջողությամբ ընդունվել է։")
@@ -411,20 +383,19 @@ def submit_cart_checkout():
 
 @app.route('/admin')
 def admin_panel():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute("SELECT id, customer_name, phone_number, address, date_created FROM measurements ORDER BY id DESC")
-        measurements = cursor.fetchall()
-        
-        cursor.execute("SELECT id, customer_name, phone_number, products, total_amount, mode, date FROM orders ORDER BY id DESC")
-        orders = cursor.fetchall()
-        cursor.close()
-        conn.close()
-    except Exception as e:
-        print(f"Ադմին բազայի սխալ: {e}")
-        measurements, orders = [], []
+    measurements, orders = [], []
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, customer_name, phone_number, address, date_created FROM measurements ORDER BY id DESC")
+            measurements = cursor.fetchall()
+            cursor.execute("SELECT id, customer_name, phone_number, products, total_amount, mode, date FROM orders ORDER BY id DESC")
+            orders = cursor.fetchall()
+            cursor.close()
+            conn.close()
+        except Exception as e:
+            print(f"Ադմին բազայի սխալ: {e}")
         
     products = get_all_products_from_db()
     return render_template('admin.html', measurements=measurements, orders=orders, products=products, doors_count=len(products))
@@ -443,33 +414,35 @@ def add_product():
     
     is_new = 1
         
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            """INSERT INTO products (title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images) 
-               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-            (title, price, metal, wood, filler, category, is_new, desc, main_image, gallery_images)
-        )
-        conn.commit()
-        cursor.close()
-        conn.close()
-    except Exception as e:
-        print(f"Ապրանք ավելացնելու սխալ: {e}")
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                """INSERT INTO products (title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images) 
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                (title, price, metal, wood, filler, category, is_new, desc, main_image, gallery_images)
+            )
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except Exception as e:
+            print(f"Ապրանք ավելացնելու սխալ: {e}")
             
     return redirect(url_for('admin_panel'))
 
 @app.route('/admin/delete-product/<int:product_id>', methods=['POST', 'GET'])
 def delete_product(product_id):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM products WHERE id = %s", (product_id,))
-        conn.commit()
-        cursor.close()
-        conn.close()
-    except Exception as e:
-        print(f"Ապրանք ջնջելու սխալ: {e}")
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM products WHERE id = %s", (product_id,))
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except Exception as e:
+            print(f"Ապրանք ջնջելու սխալ: {e}")
     return redirect(url_for('admin_panel'))
 
 @app.route('/toggle-mode')
