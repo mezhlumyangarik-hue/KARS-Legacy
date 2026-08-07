@@ -31,53 +31,54 @@ def get_db_connection():
         return None
 
 # ==========================================
-# 💎 DZER DZERQOV TVATZ NKARNEROV PERMANENT PRODUCTS
+# 💎 ՄՇՏԱԿԱՆ (ԱՆԽԱՓԱՆ) ՄՈՒՏՔԻ ԴՌՆԵՐԻ ՆԿԱՐՆԵՐ
 # ==========================================
+# Այս SVG նկարները չեն կախված արտաքին սերվերներից և 100% աշխատելու են Vercel-ում
+DOOR_1_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 700' width='100%' height='100%'><rect width='400' height='700' fill='%231e242b'/><rect x='20' y='20' width='360' height='660' fill='%232a323d' stroke='%23d4af37' stroke-width='4'/><rect x='40' y='40' width='180' height='620' fill='%23222831'/><line x1='60' y1='60' x2='60' y2='640' stroke='%23393e46' stroke-width='6'/><line x1='90' y1='60' x2='90' y2='640' stroke='%23393e46' stroke-width='6'/><line x1='120' y1='60' x2='120' y2='640' stroke='%23393e46' stroke-width='6'/><line x1='150' y1='60' x2='150' y2='640' stroke='%23393e46' stroke-width='6'/><line x1='180' y1='60' x2='180' y2='640' stroke='%23393e46' stroke-width='6'/><rect x='250' y='60' width='110' height='500' fill='%235c6e82' opacity='0.7'/><rect x='250' y='570' width='110' height='90' fill='%235c6e82' opacity='0.7'/><rect x='48' y='320' width='14' height='120' rx='4' fill='%23d4af37'/><circle cx='55' cy='460' r='6' fill='%23d4af37'/></svg>"
+
+DOOR_2_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 700' width='100%' height='100%'><rect width='400' height='700' fill='%23191919'/><rect x='20' y='20' width='360' height='660' fill='%23222222' stroke='%23444' stroke-width='3'/><rect x='40' y='40' width='320' height='100' fill='%232c2c2c'/><rect x='50' y='50' width='60' height='80' fill='%233a4f63' opacity='0.8'/><rect x='290' y='50' width='60' height='80' fill='%233a4f63' opacity='0.8'/><rect x='50' y='160' width='60' height='500' fill='%233a4f63' opacity='0.8'/><rect x='290' y='160' width='60' height='500' fill='%233a4f63' opacity='0.8'/><rect x='130' y='160' width='140' height='500' fill='%232c2c2c'/><line x1='150' y1='170' x2='150' y2='650' stroke='%23111' stroke-width='5'/><line x1='170' y1='170' x2='170' y2='650' stroke='%23111' stroke-width='5'/><line x1='190' y1='170' x2='190' y2='650' stroke='%23111' stroke-width='5'/><line x1='210' y1='170' x2='210' y2='650' stroke='%23111' stroke-width='5'/><line x1='230' y1='170' x2='230' y2='650' stroke='%23111' stroke-width='5'/><line x1='250' y1='170' x2='250' y2='650' stroke='%23111' stroke-width='5'/><rect x='122' y='320' width='12' height='140' fill='%23cccccc'/></svg>"
+
+DOOR_3_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 700' width='100%' height='100%'><rect width='400' height='700' fill='%232b2622'/><rect x='20' y='20' width='360' height='660' fill='%2338312b' stroke='%23c5a059' stroke-width='3'/><rect x='40' y='40' width='320' height='620' fill='%232b2622'/><rect x='60' y='60' width='280' height='580' fill='%23423932'/><line x1='80' y1='60' x2='80' y2='640' stroke='%232b2622' stroke-width='8'/><line x1='110' y1='60' x2='110' y2='640' stroke='%232b2622' stroke-width='8'/><line x1='140' y1='60' x2='140' y2='640' stroke='%232b2622' stroke-width='8'/><line x1='170' y1='60' x2='170' y2='640' stroke='%232b2622' stroke-width='8'/><line x1='200' y1='60' x2='200' y2='640' stroke='%232b2622' stroke-width='8'/><line x1='230' y1='60' x2='230' y2='640' stroke='%232b2622' stroke-width='8'/><line x1='260' y1='60' x2='260' y2='640' stroke='%232b2622' stroke-width='8'/><line x1='290' y1='60' x2='290' y2='640' stroke='%232b2622' stroke-width='8'/><line x1='320' y1='60' x2='320' y2='640' stroke='%232b2622' stroke-width='8'/><rect x='48' y='330' width='10' height='100' fill='%23c5a059'/></svg>"
+
 PERMANENT_PRODUCTS = [
     {
         'id': 1001,
-        'title': 'KARS Grand Armored Metal 01',
+        'title': 'KARS Modern Slate Glass Door',
         'price': 280000,
-        'metal': '3mm Steel',
-        'wood': 'MDF (Walnut)',
-        'filler': 'Basalt Insulation',
-        'category': 'External Metal',
+        'metal': '3մմ Բարձրամուր Պողպատ',
+        'wood': 'MDF Փայտյա Երեսպատում',
+        'filler': 'Բազալտե Ջերմամեկուսիչ Բամբակ',
+        'category': 'Արտաքին Մետաղական',
         'is_new': True,
-        'desc': 'High quality external entrance metal door with advanced security locks and soundproofing.',
-        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrYaEdZ0T2J_ilY9IK5Om6XCJYL4SJerOZ6eRDFFk0zA&s=10',
-        'gallery_images': [
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrYaEdZ0T2J_ilY9IK5Om6XCJYL4SJerOZ6eRDFFk0zA&s=10'
-        ]
+        'desc': 'Մոդեռն դիզայնով արտաքին մուտքի դուռ՝ ապակե ներդիրով, երկար բռնակով և բարձր անվտանգության փականներով։',
+        'main_image': DOOR_1_SVG,
+        'gallery_images': [DOOR_1_SVG]
     },
     {
         'id': 1002,
-        'title': 'KARS Premium MDF Entry Door',
-        'price': 195000,
-        'metal': '2.5mm Metal Frame',
-        'wood': 'Premium MDF Enamel',
-        'filler': 'Sound Insulation Board',
-        'category': 'MDF Entry Door',
+        'title': 'KARS Grand Lattice Gate Door',
+        'price': 320000,
+        'metal': 'Ամրացված Մետաղական Կարկաս 3մմ',
+        'wood': 'Պրեմիում MDF Էմալ Պատվածք',
+        'filler': 'Ձայնամեկուսիչ Բազալտե Սալ',
+        'category': 'Էքսկլյուզիվ Մուտքի Դուռ',
         'is_new': True,
-        'desc': 'Modern entrance door with premium MDF coating and elegant wood texture.',
-        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCuzAgG3zo4HRWJoxI1lW6CQvVG-nVfWBwmQemT5JFP8ou9Y4wuryPi88&s=10',
-        'gallery_images': [
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCuzAgG3zo4HRWJoxI1lW6CQvVG-nVfWBwmQemT5JFP8ou9Y4wuryPi88&s=10'
-        ]
+        'desc': 'Շքեղ երկաթյա դուռ՝ երկկողմանի ապակե հատվածներով և դեկորատիվ մետաղական նախշերով։',
+        'main_image': DOOR_2_SVG,
+        'gallery_images': [DOOR_2_SVG]
     },
     {
         'id': 1003,
-        'title': 'KARS Modern Steel & MDF Elite',
+        'title': 'KARS Vertical Slat Entrance Door',
         'price': 240000,
-        'metal': '3mm Steel Profile',
-        'wood': 'Modern Natural MDF Panel',
-        'filler': 'Basalt Board',
-        'category': 'Exclusive Entry Door',
+        'metal': '2.5մմ Պողպատյա Պրոֆիլ',
+        'wood': 'Բնական MDF Vertical Panel',
+        'filler': 'Ջերմա-ձայնամեկուսիչ Սալ',
+        'category': 'MDF Մուտքի Դուռ',
         'is_new': True,
-        'desc': 'Exclusive design door combining high strength metal and elegant MDF panels.',
-        'main_image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy9MmS7LykInR7CWQ4G28Y3YBjltlOjMz81Mx4zREvMkvlH5bnoyIzowQ&s=10',
-        'gallery_images': [
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy9MmS7LykInR7CWQ4G28Y3YBjltlOjMz81Mx4zREvMkvlH5bnoyIzowQ&s=10'
-        ]
+        'desc': 'Ուղղահայաց գծերով ժամանակակից մուտքի դուռ՝ առանձնատների և բնակարանների համար։',
+        'main_image': DOOR_3_SVG,
+        'gallery_images': [DOOR_3_SVG]
     }
 ]
 
@@ -304,14 +305,14 @@ def clear_cart():
 
 @app.route('/submit-order', methods=['POST'])
 def submit_order():
-    name = request.form.get('name') or 'Anonymous'
-    phone = request.form.get('phone') or 'Not specified'
-    city = request.form.get('city', 'Goris')
-    door_type = request.form.get('door_type', 'Not specified')
-    size = request.form.get('size', 'Not specified')
+    name = request.form.get('name') or 'Անոնիմ'
+    phone = request.form.get('phone') or 'Նշված չէ'
+    city = request.form.get('city', 'Գորիս')
+    door_type = request.form.get('door_type', 'Նշված չէ')
+    size = request.form.get('size', 'Չափսը նշված չէ')
     notes = request.form.get('notes', '')
     
-    full_address = f"City: {city} | Type: {door_type} | Size: {size} | Notes: {notes}"
+    full_address = f"📍 Բնակավայր՝ {city} | 🚪 Տեսակ՝ {door_type} | 📐 Չափս՝ {size} | 📝 Նշումներ՝ {notes}"
     
     conn = get_db_connection()
     if conn:
@@ -322,15 +323,15 @@ def submit_order():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Measurement DB error: {e}")
+            print(f"Չափագրման բազայի սխալ. {e}")
         
-    return render_template('success.html', title="Submitted", text="Your request has been submitted successfully.")
+    return render_template('success.html', title="📩 Հայտն Ընդունված Է", text="Ձեր չափագրման հայտը հաջողությամբ գրանցվել է։")
 
 @app.route('/submit-cart-checkout', methods=['POST'])
 def submit_cart_checkout():
-    name = request.form.get('name') or request.form.get('customer_name') or 'Anonymous'
-    phone = request.form.get('phone') or request.form.get('phone_number') or 'Not specified'
-    city = request.form.get('city', 'Goris')
+    name = request.form.get('name') or request.form.get('customer_name') or 'Անոնիմ'
+    phone = request.form.get('phone') or request.form.get('phone_number') or 'Նշված չէ'
+    city = request.form.get('city', 'Գորիս')
     notes = request.form.get('notes', '')
 
     cart = session.get('cart', {})
@@ -342,12 +343,12 @@ def submit_cart_checkout():
             price = int(str(item['price']).replace(',', '').replace(' ', ''))
             qty = int(item.get('quantity', 1))
             total_price += price * qty
-            cart_summary.append(f"{item['title']} ({qty} pcs)")
+            cart_summary.append(f"{item['title']} ({qty} հատ)")
         except:
             pass
 
-    products_text = ", ".join(cart_summary) if cart_summary else "Empty Cart"
-    full_details = f"Products: {products_text} | City: {city} | Notes: {notes}"
+    products_text = ", ".join(cart_summary) if cart_summary else "Դատարկ զամբյուղ"
+    full_details = f"📦 Ապրանքներ: {products_text} | 📍 Բնակավայր: {city} | 📝 Նշումներ: {notes}"
     current_mode = session.get('site_mode', 'Test Mode')
 
     conn = get_db_connection()
@@ -362,10 +363,10 @@ def submit_cart_checkout():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Order DB error: {e}")
+            print(f"Բազայի սխալ պատվերի ժամանակ. {e}")
 
     session.pop('cart', None)
-    return render_template('success.html', title="Order Submitted", text="Thank you! Your order has been placed.")
+    return render_template('success.html', title="📩 Պատվերը Գրանցվեց", text="Շնորհակալություն! Ձեր պատվերը հաջողությամբ ընդունվել է։")
 
 @app.route('/admin')
 def admin_panel():
@@ -381,7 +382,7 @@ def admin_panel():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Admin DB error: {e}")
+            print(f"Ադմին բազայի սխալ: {e}")
         
     products = get_all_products_from_db()
     return render_template('admin.html', measurements=measurements, orders=orders, products=products, doors_count=len(products))
@@ -413,7 +414,7 @@ def add_product():
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Add product error: {e}")
+            print(f"Ապրանք ավելացնելու սխալ: {e}")
             
     return redirect(url_for('admin_panel'))
 
@@ -428,7 +429,7 @@ def delete_product(product_id):
             cursor.close()
             conn.close()
         except Exception as e:
-            print(f"Delete product error: {e}")
+            print(f"Ապրանք ջնջելու սխալ: {e}")
     return redirect(url_for('admin_panel'))
 
 @app.route('/toggle-mode')
