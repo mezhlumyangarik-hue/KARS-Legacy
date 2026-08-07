@@ -30,6 +30,57 @@ def get_db_connection():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     return conn
 
+# 🛠️ ԲԱԶԱՅԻ ՍԿԶԲՆԱԿԱՆ ԱՊՐԱՆՔՆԵՐԻ ԱՎԵԼԱՑՈՒՄ (KARS LEGACY DEFAULT PRODUCTS)
+def seed_default_products(cursor):
+    cursor.execute("SELECT COUNT(*) FROM products")
+    count = cursor.fetchone()[0]
+    
+    # Եթե ապրանքների աղյուսակը դատարկ է, լցնում ենք սկզբնական KARS Legacy ապրանքները
+    if count == 0:
+        default_products = [
+            (
+                "KARS Legacy Armored Metal 01", 
+                250000, 
+                "3մմ Բարձրամուր Պողպատ", 
+                "MDF Փայտյա Երեսպատում", 
+                "Բազալտե Ջերմամեկուսիչ Բամբակ", 
+                "Արտաքին Մետաղական", 
+                1, 
+                "Էքսկլյուզիվ արտաքին մետաղական դուռ՝ բարձր պաշտպանվածությամբ և ձայնամեկուսացմամբ:", 
+                "", 
+                ""
+            ),
+            (
+                "KARS Classic MDF Interior", 
+                120000, 
+                "Ամրացված Մետաղական Կարկաս", 
+                "Պրեմիում MDF Էմալ", 
+                "Փայտե Լցանյութ", 
+                "Միջսենյակային", 
+                1, 
+                "Ժամանակակից ոճի միջսենյակային դուռ՝ նախատեսված բնակարանների և առանձնատների համար:", 
+                "", 
+                ""
+            ),
+            (
+                "KARS Modern Gold Line", 
+                185000, 
+                "2.5մմ Պողպատյա Պրոֆիլ", 
+                "Բնական Փայտ / MDF", 
+                "Ջերմա-ձայնամեկուսիչ Սալ", 
+                "Էքսկլյուզիվ", 
+                1, 
+                "Ոսկեգույն էլեմենտներով և ժամանակակից դիզայնով բարձրորակ դուռ:", 
+                "", 
+                ""
+            )
+        ]
+        
+        cursor.executemany("""
+            INSERT INTO products (title, price, metal, wood, filler, category, is_new, desc_text, main_image, gallery_images)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, default_products)
+
 # 🛠️ ԲԱԶԱՅԻ ԱՂՅՈՒՍԱԿՆԵՐԻ ՍՏԵՂԾՈՒՄ
 @app.route('/init-database-secure-999')
 def init_db():
@@ -78,10 +129,13 @@ def init_db():
             );
         ''')
         
+        # Սկզբնական ապրանքների ավելացում
+        seed_default_products(cursor)
+        
         conn.commit()
         cursor.close()
         conn.close()
-        return "Բազան հաջողությամբ թարմացվել է։"
+        return "Բազան հաջողությամբ թարմացվել է և KARS Legacy ապրանքները ավելացվել են։"
     except Exception as e:
         return f"Սխալ բազան գործարկելիս: {e}"
 
@@ -154,7 +208,9 @@ def upload_file():
 def home():
     all_doors = get_all_products_from_db()
     new_doors = [door for door in all_doors if door['is_new']]
-    return render_template('index.html', products=new_doors)
+    # Եթե նորույթ դրված չէ, ցույց է տալիս բոլոր ապրանքները
+    display_products = new_doors if new_doors else all_doors
+    return render_template('index.html', products=display_products)
 
 @app.route('/shop')
 def shop_page():
