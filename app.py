@@ -166,5 +166,7 @@ def add_to_cart(product_id):
     
     return redirect(url_for('shop_page'))
 
+app = app
+
 if __name__ == '__main__':
     app.run(debug=True)
