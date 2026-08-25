@@ -2,6 +2,7 @@
 
 {% block content %}
 
+<!-- Hero Carousel -->
 <div class="luxury-carousel-container" style="position: relative; width: 100%; height: 70vh; overflow: hidden; background: #070707;">
     <div class="carousel-track" style="display: flex; width: 300%; height: 100%; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);">
         
@@ -31,16 +32,17 @@
 
     </div>
 
-    <button class="carousel-btn prev" onclick="moveSlide(-1)" style="position: absolute; top: 50%; left: 25px; transform: translateY(-50%); background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.3); color: #fff; font-size: 24px; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; transition: 0.3s; display: flex; align-items: center; justify-content: center; outline: none;">‹</button>
-    <button class="carousel-btn next" onclick="moveSlide(1)" style="position: absolute; top: 50%; right: 25px; transform: translateY(-50%); background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.3); color: #fff; font-size: 24px; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; transition: 0.3s; display: flex; align-items: center; justify-content: center; outline: none;">›</button>
+    <button class="carousel-btn prev" onclick="moveSlide(-1)" aria-label="Previous Slide">‹</button>
+    <button class="carousel-btn next" onclick="moveSlide(1)" aria-label="Next Slide">›</button>
 
     <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">
-        <span class="carousel-dot active" onclick="currentSlide(0)" style="width: 12px; height: 12px; background: #d4af37; border-radius: 50%; cursor: pointer; transition: 0.3s;"></span>
-        <span class="carousel-dot" onclick="currentSlide(1)" style="width: 12px; height: 12px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: 0.3s;"></span>
-        <span class="carousel-dot" onclick="currentSlide(2)" style="width: 12px; height: 12px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: 0.3s;"></span>
+        <span class="carousel-dot active" onclick="currentSlide(0)"></span>
+        <span class="carousel-dot" onclick="currentSlide(1)"></span>
+        <span class="carousel-dot" onclick="currentSlide(2)"></span>
     </div>
 </div>
 
+<!-- New Collection Section -->
 <div class="new-collection-section" style="background: #0a0a0a; padding: 80px 5%;">
     <div style="text-align: center; margin-bottom: 50px;">
         <span style="color: #d4af37; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 8px;">Էքսկլյուզիվ</span>
@@ -57,9 +59,9 @@
             <div style="position: relative; width: 100%; height: 420px; overflow: hidden; background: #161616;">
                 {% if product.main_image %}
                     {% if product.main_image.startswith('http') %}
-                        <img src="{{ product.main_image }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: fill; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
+                        <img src="{{ product.main_image }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
                     {% else %}
-                        <img src="{{ url_for('static', filename='uploads/' + product.main_image) }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: fill; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
+                        <img src="{{ url_for('static', filename='uploads/' + product.main_image) }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
                     {% endif %}
                 {% endif %}
                 
@@ -80,7 +82,7 @@
                     <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin: 0 0 10px 0;"><a href="{{ url_for('product_detail', product_id=product.id) }}" style="color: #fff; text-decoration: none;">{{ product.title }}</a></h3>
                 </div>
                 <div style="margin-top: 10px;">
-                    <div style="font-size: 20px; color: #d4af37; font-weight: 700; margin-bottom: 15px;">{{ "{:,}".format(product.price) }} ֏</div>
+                    <div style="font-size: 20px; color: #d4af37; font-weight: 700; margin-bottom: 15px;">{{ "{:,}".format(product.price) if product.price else 0 }} ֏</div>
                     <div style="display: flex; gap: 10px;">
                         <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn-view-details" style="flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px; font-size: 13px; border-radius: 6px; text-decoration: none; transition: 0.3s; text-transform: uppercase;">Դիտել</a>
                         <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" style="margin: 0; flex: 1;">
@@ -94,117 +96,6 @@
     </div>
 </div>
 
-<div id="why-choose-us" style="background: #111111; padding: 80px 5%; border-top: 1px solid rgba(255,255,255,0.02);">
-    <div style="text-align: center; margin-bottom: 50px;">
-        <span style="color: #d4af37; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 8px;">Առավելություններ</span>
-        <h2 style="color: #fff; font-size: 34px; font-weight: 700; margin: 0; text-transform: uppercase;"> Ինչու՞ <span style="color: #d4af37;">Ընտրել Մեզ</span></h2>
-        <div style="width: 50px; height: 2px; background: #d4af37; margin: 15px auto 0;"></div>
-    </div>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-        
-        <div class="why-card" style="background: #161616; border: 1px solid rgba(255,255,255,0.02); padding: 35px 25px; border-radius: 12px; text-align: center; transition: 0.3s;">
-            <div style="font-size: 40px; margin-bottom: 15px;">🛠️</div>
-            <h3 style="color: #fff; font-size: 20px; font-weight: 600; margin-bottom: 12px;">Սեփական Արտադրություն</h3>
-            <p style="color: #888; font-size: 14px; line-height: 1.6; margin: 0;">Դռները պատրաստվում են հենց Գորիսում՝ մեր փորձառու վարպետների կողմից, ինչը երաշխավորում է բարձր որակ:</p>
-        </div>
-
-        <div class="why-card" style="background: #161616; border: 1px solid rgba(255,255,255,0.02); padding: 35px 25px; border-radius: 12px; text-align: center; transition: 0.3s;">
-            <div style="font-size: 40px; margin-bottom: 15px;">📐</div>
-            <h3 style="color: #fff; font-size: 20px; font-weight: 600; margin-bottom: 12px;">Անվճար Չափագրում</h3>
-            <p style="color: #888; font-size: 14px; line-height: 1.6; margin: 0;">Մեր մասնագետը կգա Ձեր հասցեով, կկատարի ճշգրիտ չափագրում և կօգնի ընտրել լավագույն դիզայնը՝ լիովին անվճար։</p>
-        </div>
-
-        <div class="why-card" style="background: #161616; border: 1px solid rgba(255,255,255,0.02); padding: 35px 25px; border-radius: 12px; text-align: center; transition: 0.3s;">
-            <div style="font-size: 40px; margin-bottom: 15px;">💎</div>
-            <h3 style="color: #fff; font-size: 20px; font-weight: 600; margin-bottom: 12px;">Պրեմիում Նյութեր</h3>
-            <p style="color: #888; font-size: 14px; line-height: 1.6; margin: 0;">Օգտագործում ենք միայն ամուր մետաղ, որակյալ MDF սալիկներ և հուսալի փականներ երկարակեցության համար:</p>
-        </div>
-
-    </div>
-</div>
-
-<section style="background: #0e0e0e; padding: 80px 5%; border-top: 1px solid rgba(255,255,255,0.02);">
-    <div style="max-width: 1200px; margin: 0 auto;">
-        
-        <div style="text-align: center; margin-bottom: 50px;">
-            <span style="color: #d4af37; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 8px;">Իրական Պատվերներ</span>
-            <h2 style="color: #fff; font-size: 34px; font-weight: 700; margin: 0; text-transform: uppercase;">Մեր <span style="color: #d4af37;">Տեղադրած Դռները</span></h2>
-            <div style="width: 50px; height: 2px; background: #d4af37; margin: 15px auto 0;"></div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
-            
-            <div class="portfolio-card" style="background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); transition: 0.3s;">
-                <div style="height: 350px; background: #1f1f1f;">
-                    <img src="https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=800" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-                </div>
-                <div style="padding: 20px;">
-                    <span style="color: #d4af37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Արտաքին Երկաթյա Դուռ</span>
-                    <h3 style="color: #fff; font-size: 16px; margin: 5px 0 0 0; font-weight: 600;">Առանձնատուն, ք. Գորիս</h3>
-                </div>
-            </div>
-
-            <div class="portfolio-card" style="background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); transition: 0.3s;">
-                <div style="height: 350px; background: #1f1f1f;">
-                    <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=800" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-                </div>
-                <div style="padding: 20px;">
-                    <span style="color: #d4af37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">MDF Միջսենյակային Դռներ</span>
-                    <h3 style="color: #fff; font-size: 16px; margin: 5px 0 0 0; font-weight: 600;">Բնակարան, ք. Կապան</h3>
-                </div>
-            </div>
-
-            <div class="portfolio-card" style="background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03); transition: 0.3s;">
-                <div style="height: 350px; background: #1f1f1f;">
-                    <img src="https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?q=80&w=800" alt="Տեղադրված դուռ" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-                </div>
-                <div style="padding: 20px;">
-                    <span style="color: #d4af37; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Երկկողմանի Փայտ / Մետաղ</span>
-                    <h3 style="color: #fff; font-size: 16px; margin: 5px 0 0 0; font-weight: 600;">Նորակառույց, ք. Երևան</h3>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<section style="background: #111; padding: 80px 5%; color: #fff; border-top: 1px solid rgba(255,255,255,0.02);">
-    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 50px; align-items: center;">
-        
-        <div style="flex: 1; min-width: 300px;">
-            <span style="color: #d4af37; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 8px;">Աշխարհագրություն</span>
-            <h2 style="font-size: 34px; font-weight: 700; margin: 0 0 25px 0; text-transform: uppercase;">Առաքում և <span style="color: #d4af37;">Չափագրում</span></h2>
-            
-            <p style="color: #aaa; line-height: 1.7; font-size: 15px; margin-bottom: 30px;">
-                Մեր արտադրամասը գտնվում է <strong>քաղաք Գորիսում</strong>, սակայն մենք իրականացնում ենք անվճար չափագրում, առաքում և պրոֆեսիոնալ տեղադրում <strong>ողջ Սյունիքի մարզում</strong> (Գորիս, Կապան, Սիսիան, Մեղրի) և <strong>քաղաք Երևանում</strong>։
-            </p>
-
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="display: flex; align-items: center; gap: 15px; background: #161616; padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.02);">
-                    <span style="font-size: 20px; color: #d4af37;">📍</span>
-                    <div>
-                        <h4 style="margin: 0; font-size: 14px; color: #fff;">Արտադրամասի Հասցե</h4>
-                        <p style="margin: 3px 0 0 0; font-size: 13px; color: #888;">ք. Գորիս, Արցախյան խճուղի</p>
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 15px; background: #161616; padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.02);">
-                    <span style="font-size: 20px; color: #d4af37;">📞</span>
-                    <div>
-                        <h4 style="margin: 0; font-size: 14px; color: #fff;">Հեռախոսահամար</h4>
-                        <p style="margin: 3px 0 0 0; font-size: 13px; color: #888;">+374 (96) 78-78-55 / +374 (98) 55-08-27</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div style="flex: 1; min-width: 300px; height: 350px; background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.04);">
-            <iframe src="https://maps.google.com/maps?q=Goris,Armenia&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-
-    </div>
-</section>
-
 <script>
     let currentIdx = 0;
     const track = document.querySelector('.carousel-track');
@@ -214,7 +105,6 @@
 
     function updateCarousel() {
         track.style.transform = `translateX(-${currentIdx * 33.333}%)`;
-        
         dots.forEach((dot, index) => {
             if(index === currentIdx) {
                 dot.classList.add('active');
@@ -259,6 +149,35 @@
 </script>
 
 <style>
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.4);
+        border: 1px solid rgba(212,175,55,0.3);
+        color: #fff;
+        font-size: 24px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: none;
+    }
+    .carousel-btn.prev { left: 25px; }
+    .carousel-btn.next { right: 25px; }
+    .carousel-dot {
+        width: 12px;
+        height: 12px;
+        background: rgba(255,255,255,0.4);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.3s;
+    }
     .btn-carousel-lux {
         background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
         color: #000 !important;
@@ -272,44 +191,18 @@
         transition: 0.3s;
         box-shadow: 0 4px 15px rgba(212,175,55,0.2);
     }
-    .btn-carousel-lux:hover {
-        background: #fff;
-        transform: translateY(-2px);
-    }
-    .carousel-btn:hover {
-        background: #d4af37 !important;
-        color: #000 !important;
-    }
-    
+    .btn-carousel-lux:hover { background: #fff; transform: translateY(-2px); }
+    .carousel-btn:hover { background: #d4af37 !important; color: #000 !important; }
     .product-premium-card:hover {
         transform: translateY(-8px) !important;
         border-color: rgba(212, 175, 55, 0.4) !important;
         box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
     }
-    .product-premium-card:hover img {
-        transform: scale(1.05) !important;
-    }
-    .why-card:hover, .portfolio-card:hover {
-        background: #1a1a1a !important;
-        border-color: rgba(212,175,55,0.1) !important;
-        transform: translateY(-4px);
-    }
-    .portfolio-card {
-        transition: 0.3s ease;
-    }
-    .btn-view-details:hover {
-        background: rgba(255,255,255,0.05);
-        border-color: #fff;
-    }
-    .btn-add-cart-main:hover {
-        background: #fff;
-    }
-    .svg-fallback-box {
-        display: flex;
-    }
-    .svg-fallback-box.has-image {
-        display: none;
-    }
+    .product-premium-card:hover img { transform: scale(1.05) !important; }
+    .btn-view-details:hover { background: rgba(255,255,255,0.05); border-color: #fff; }
+    .btn-add-cart-main:hover { background: #fff; }
+    .svg-fallback-box { display: flex; }
+    .svg-fallback-box.has-image { display: none; }
 </style>
 
 {% endblock %}
