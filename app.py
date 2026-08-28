@@ -46,5 +46,17 @@ def door_detail(door_id):
         abort(404)
     return render_template('door_detail.html', door=door)
 
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    return render_template('checkout.html')
+
+@app.route('/shop')
+def shop():
+    return render_template('shop.html', products=PERMANENT_PRODUCTS)
+
 if __name__ == '__main__':
     app.run(debug=True)
