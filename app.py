@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, session, abort
+from flask import Flask, render_template, request, abort, session, redirect, url_for
 
 app = Flask(__name__)
 app.secret_key = "mezhlumyan_doors_ultra_secret_key_999"
 
+
 # =========================================================
-# KARS LEGACY — PRODUCTS
-# Images are stored locally in: static/image/
+# KARS LEGACY — ՄՇՏԱԿԱՆ ԱՊՐԱՆՔՆԵՐ
+# Ապրանքները պահվում են հենց կոդի մեջ։
+# Նկարները վերցվում են static/image/ պանակից։
 # =========================================================
 
 PERMANENT_PRODUCTS = [
@@ -23,8 +25,8 @@ PERMANENT_PRODUCTS = [
         "gallery_images": [
             "KARS_Legacy_1.jpg",
             "Kars_Legacy_2.jpg",
-            "KARS_Legacy_3.jpg",
-        ],
+            "KARS_Legacy_3.jpg"
+        ]
     },
     {
         "id": 1004,
@@ -36,256 +38,260 @@ PERMANENT_PRODUCTS = [
         "category": "double-iron",
         "is_new": False,
         "desc": "Երկկողմանի ամրացված մետաղական դուռ՝ նախատեսված հատուկ անվտանգություն պահանջող առանձնատների համար:",
-        "main_image": "KARS_Legacy_3.jpg",
+        "main_image": "Kars_Legacy_2.jpg",
         "gallery_images": [
-            "KARS_Legacy_3.jpg",
             "Kars_Legacy_2.jpg",
             "KARS_Legacy_1.jpg",
-        ],
-    },
+            "KARS_Legacy_3.jpg"
+        ]
+    }
 ]
 
 
 # =========================================================
-# HELPERS
+# ՕԳՆԱԿԱՆ ՖՈՒՆԿՑԻԱՆԵՐ
 # =========================================================
 
 def get_product(product_id):
     return next(
         (product for product in PERMANENT_PRODUCTS if product["id"] == product_id),
-        None,
+        None
     )
 
 
 def get_cart():
-    return session.get("cart", {})
+    cart = session.get("cart", {})
+    if not isinstance(cart, dict):
+        cart = {}
+    return cart
 
 
-def get_cart_items():
-    cart = get_cart()
+def cart_items():
     items = []
+    total = 0
+    cart = get_cart()
 
-    for product_id, quantity in cart.items():
-        product = get_product(int(product_id))
-        if product:
-            quantity = int(quantity)
+    for product in PERMANENT_PRODUCTS:
+        key = str(product["id"])
+        quantity = int(cart.get(key, 0))
+
+        if quantity > 0:
             item = dict(product)
             item["quantity"] = quantity
             item["subtotal"] = product["price"] * quantity
             items.append(item)
+            total += item["subtotal"]
 
-    return items
-
-
-def get_cart_count():
-    return sum(int(qty) for qty in get_cart().values())
+    return items, total
 
 
-def get_cart_total():
-    return sum(item["subtotal"] for item in get_cart_items())
-
-
-# Makes cart_count available in EVERY template.
 @app.context_processor
-def inject_global_values():
+def inject_global_data():
+    items, total = cart_items()
     return {
-        "cart_count": get_cart_count(),
-        "cart_items": get_cart_items(),
-        "cart_total": get_cart_total(),
+        "cart_count": sum(item["quantity"] for item in items),
+        "cart_items": items,
+        "cart_total": total,
+        "permanent_products": PERMANENT_PRODUCTS
     }
 
 
 # =========================================================
-# MAIN PAGES
+# ԳԼԽԱՎՈՐ
 # =========================================================
 
 @app.route("/")
-def home():
+def index():
     return render_template(
         "index.html",
         products=PERMANENT_PRODUCTS,
-        search_query="",
+        search_query=""
     )
 
 
-# Backward-compatible endpoint if any old template uses index.
-@app.route("/index")
-def index():
-    return redirect(url_for("home"))
+# layout.html-ում օգտագործվող home անունը
+@app.route("/home")
+def home():
+    return redirect(url_for("index"))
 
+
+# =========================================================
+# ՏԵՍԱԿԱՆԻ
+# =========================================================
 
 @app.route("/shop")
-def shop_page():
-    query = request.args.get("query", "").strip()
-
-    if query:
-        query_lower = query.lower()
-        products = [
-            product
-            for product in PERMANENT_PRODUCTS
-            if query_lower in product["title"].lower()
-            or query_lower in product["desc"].lower()
-            or query_lower in product["category"].lower()
-        ]
-    else:
-        products = PERMANENT_PRODUCTS
-
+def shop():
     return render_template(
         "shop.html",
-        products=products,
-        search_query=query,
+        products=PERMANENT_PRODUCTS,
+        search_query=""
     )
 
 
-# Old endpoint name kept working.
+# layout.html-ի shop_page հղման համար
 @app.route("/shop-page")
-def shop():
-    return redirect(url_for("shop_page"))
+def shop_page():
+    return redirect(url_for("shop"))
 
+
+# =========================================================
+# ՈՐՈՆՈՒՄ
+# =========================================================
 
 @app.route("/search")
 def search():
     query = request.args.get("query", "").strip()
 
     if not query:
-        return redirect(url_for("shop_page"))
+        products = PERMANENT_PRODUCTS
+    else:
+        q = query.lower()
+        products = [
+            product for product in PERMANENT_PRODUCTS
+            if q in product["title"].lower()
+            or q in product["desc"].lower()
+            or q in product["category"].lower()
+            or q in product["metal"].lower()
+            or q in product["wood"].lower()
+        ]
 
-    return redirect(url_for("shop_page", query=query))
-
-
-@app.route("/orders")
-def orders_page():
-    return render_template("orders.html")
+    return render_template(
+        "shop.html",
+        products=products,
+        search_query=query
+    )
 
 
 # =========================================================
-# PRODUCT
+# ԱՊՐԱՆՔԻ ԷՋ
 # =========================================================
 
 @app.route("/door/<int:door_id>")
+@app.route("/product/<int:door_id>")
 def door_detail(door_id):
     product = get_product(door_id)
 
-    if product is None:
+    if not product:
         abort(404)
 
-    # Supports templates that use either "door" or "product".
+    # Տալիս ենք և՛ door, և՛ product,
+    # որպեսզի երկու տեսակի template-երի հետ աշխատի։
     return render_template(
         "product_detail.html",
         product=product,
-        door=product,
-    )
-
-
-@app.route("/product/<int:product_id>")
-def product_detail(product_id):
-    product = get_product(product_id)
-
-    if product is None:
-        abort(404)
-
-    return render_template(
-        "product_detail.html",
-        product=product,
-        door=product,
+        door=product
     )
 
 
 # =========================================================
-# CART
+# ԶԱՄԲՅՈՒՂ
 # =========================================================
 
 @app.route("/cart")
-def cart_page():
+def cart():
+    items, total = cart_items()
+
     return render_template(
         "cart.html",
-        items=get_cart_items(),
-        total=get_cart_total(),
+        items=items,
+        products=items,
+        total=total,
+        cart_total=total
     )
 
 
-# Old endpoint name kept working.
 @app.route("/cart-page")
-def cart():
-    return redirect(url_for("cart_page"))
+def cart_page():
+    return redirect(url_for("cart"))
 
 
-@app.route("/cart/add/<int:product_id>", methods=["POST", "GET"])
+@app.route("/add-to-cart/<int:product_id>", methods=["GET", "POST"])
+@app.route("/cart/add/<int:product_id>", methods=["GET", "POST"])
 def add_to_cart(product_id):
     product = get_product(product_id)
 
-    if product is None:
+    if not product:
         abort(404)
 
-    cart = dict(get_cart())
+    cart = get_cart()
     key = str(product_id)
     cart[key] = int(cart.get(key, 0)) + 1
 
     session["cart"] = cart
     session.modified = True
 
-    return redirect(request.referrer or url_for("shop_page"))
+    return redirect(request.referrer or url_for("index"))
 
 
-@app.route("/cart/remove/<int:product_id>", methods=["POST", "GET"])
+@app.route("/remove-from-cart/<int:product_id>", methods=["GET", "POST"])
+@app.route("/cart/remove/<int:product_id>", methods=["GET", "POST"])
 def remove_from_cart(product_id):
-    cart = dict(get_cart())
+    cart = get_cart()
     key = str(product_id)
 
     if key in cart:
-        cart.pop(key)
+        cart[key] = int(cart[key]) - 1
+        if cart[key] <= 0:
+            del cart[key]
 
     session["cart"] = cart
     session.modified = True
 
-    return redirect(url_for("cart_page"))
+    return redirect(request.referrer or url_for("cart"))
 
 
-@app.route("/cart/clear", methods=["POST", "GET"])
+@app.route("/cart/clear", methods=["GET", "POST"])
+@app.route("/clear-cart", methods=["GET", "POST"])
 def clear_cart():
     session["cart"] = {}
     session.modified = True
-    return redirect(url_for("cart_page"))
+    return redirect(url_for("cart"))
 
 
 # =========================================================
-# CHECKOUT
+# ՉԱՓԱԳՐՈՒՄ / ՊԱՏՎԵՐ
 # =========================================================
+
+@app.route("/orders")
+def orders():
+    return render_template("orders.html")
+
+
+@app.route("/orders-page")
+def orders_page():
+    return redirect(url_for("orders"))
+
 
 @app.route("/checkout", methods=["GET", "POST"])
 def checkout():
-    items = get_cart_items()
-    total = get_cart_total()
+    items, total = cart_items()
 
     if request.method == "POST":
-        # The existing checkout template can receive the order data.
-        # A real database/order system can be connected later.
+        # Այստեղ տվյալները կարող են հետագայում ուղարկվել
+        # WhatsApp / Telegram / email / database։
+        session["cart"] = {}
+        session.modified = True
         return render_template(
             "success.html",
-            items=items,
             total=total,
-            customer_name=request.form.get("name", ""),
-            customer_phone=request.form.get("phone", ""),
+            items=items
         )
 
     return render_template(
         "checkout.html",
         items=items,
         total=total,
+        cart_total=total
     )
 
 
 @app.route("/success")
 def success():
-    return render_template(
-        "success.html",
-        items=[],
-        total=0,
-    )
+    return render_template("success.html")
 
 
 # =========================================================
-# RUN
+# APP START
 # =========================================================
 
 if __name__ == "__main__":
