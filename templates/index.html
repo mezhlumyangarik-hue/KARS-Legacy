@@ -1,125 +1,722 @@
-{% extends 'layout.html' %}
+{% extends "layout.html" %}
+
+{% block title %}KARS Legacy — Մուտքի Դռներ{% endblock %}
 
 {% block content %}
 
-<!-- Hero Carousel -->
-<div class="luxury-carousel-container" style="position: relative; width: 100%; height: 70vh; overflow: hidden; background: #070707;">
-    <div class="carousel-track" style="display: flex; width: 300%; height: 100%; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);">
-        
-        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
-            <div class="slide-content" style="max-width: 800px;">
-                <h2 style="font-size: 46px; color: #fff; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;">KARS Legacy <span style="color: #d4af37;">Դռներ</span></h2>
-                <p style="color: #ddd; font-size: 18px; margin-bottom: 30px; font-weight: 300;">Բարձրակարգ մետաղական և MDF դռների արտադրություն Գորիսում:</p>
-                <a href="{{ url_for('shop_page') }}" class="btn-carousel-lux">Տեսնել Տեսականին</a>
+<!-- =====================================================
+     HERO CAROUSEL
+===================================================== -->
+
+<div
+    class="luxury-carousel-container"
+    style="
+        position:relative;
+        width:100%;
+        height:70vh;
+        min-height:520px;
+        overflow:hidden;
+        background:#070707;
+    "
+>
+    <div
+        class="carousel-track"
+        style="
+            display:flex;
+            width:300%;
+            height:100%;
+            transition:transform .8s cubic-bezier(.25,1,.5,1);
+        "
+    >
+
+        <div
+            class="carousel-slide"
+            style="
+                width:33.333%;
+                height:100%;
+                background:
+                    linear-gradient(rgba(0,0,0,.52),rgba(0,0,0,.88)),
+                    url('https://images.unsplash.com/photo-1558036117-15d82a90b9b1?q=80&w=1600')
+                    no-repeat center/cover;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                text-align:center;
+                padding:0 20px;
+            "
+        >
+            <div style="max-width:800px;">
+                <div style="color:#d4af37;font-size:12px;font-weight:800;letter-spacing:4px;margin-bottom:16px;">
+                    KARS LEGACY • GORIS
+                </div>
+
+                <h2
+                    style="
+                        font-size:clamp(32px,5vw,58px);
+                        color:#fff;
+                        font-weight:800;
+                        text-transform:uppercase;
+                        margin:0 0 15px;
+                        letter-spacing:1px;
+                    "
+                >
+                    KARS Legacy
+                    <span style="color:#d4af37;">Դռներ</span>
+                </h2>
+
+                <p
+                    style="
+                        color:#ddd;
+                        font-size:18px;
+                        line-height:1.7;
+                        margin:0 auto 30px;
+                        font-weight:300;
+                        max-width:700px;
+                    "
+                >
+                    Բարձրակարգ մետաղական և MDF դռների արտադրություն Գորիսում։
+                </p>
+
+                <a href="{{ url_for('shop_page') }}" class="btn-carousel-lux">
+                    Տեսնել Տեսականին
+                </a>
             </div>
         </div>
 
-        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
-            <div class="slide-content" style="max-width: 800px;">
-                <h2 style="font-size: 46px; color: #fff; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;">Անհատական <span style="color: #d4af37;">Պատվերներ</span></h2>
-                <p style="color: #ddd; font-size: 18px; margin-bottom: 30px; font-weight: 300;">Անվճար չափագրում, դիզայնի ընտրություն և պրոֆեսիոնալ տեղադրում Սյունիքում:</p>
-                <a href="{{ url_for('orders_page') }}" class="btn-carousel-lux">Պատվիրել Չափագրում</a>
+
+        <div
+            class="carousel-slide"
+            style="
+                width:33.333%;
+                height:100%;
+                background:
+                    linear-gradient(rgba(0,0,0,.52),rgba(0,0,0,.88)),
+                    url('https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=1600')
+                    no-repeat center/cover;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                text-align:center;
+                padding:0 20px;
+            "
+        >
+            <div style="max-width:800px;">
+
+                <div style="color:#d4af37;font-size:12px;font-weight:800;letter-spacing:4px;margin-bottom:16px;">
+                    INDIVIDUAL DESIGN
+                </div>
+
+                <h2
+                    style="
+                        font-size:clamp(32px,5vw,58px);
+                        color:#fff;
+                        font-weight:800;
+                        text-transform:uppercase;
+                        margin:0 0 15px;
+                    "
+                >
+                    Անհատական
+                    <span style="color:#d4af37;">Պատվերներ</span>
+                </h2>
+
+                <p
+                    style="
+                        color:#ddd;
+                        font-size:18px;
+                        line-height:1.7;
+                        margin:0 auto 30px;
+                        max-width:700px;
+                    "
+                >
+                    Անվճար չափագրում, դիզայնի ընտրություն և պրոֆեսիոնալ տեղադրում Սյունիքում։
+                </p>
+
+                <a href="{{ url_for('orders_page') }}" class="btn-carousel-lux">
+                    Պատվիրել Չափագրում
+                </a>
             </div>
         </div>
 
-        <div class="carousel-slide" style="width: 33.333%; height: 100%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?q=80&w=1200') no-repeat center center/cover; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 20px; box-sizing: border-box;">
-            <div class="slide-content" style="max-width: 800px;">
-                <h2 style="font-size: 46px; color: #fff; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px;">Որակ և <span style="color: #d4af37;">Երաշխիք</span></h2>
-                <p style="color: #ddd; font-size: 18px; margin-bottom: 30px; font-weight: 300;">Մեր պատրաստած յուրաքանչյուր դուռ ապահովում է Ձեր տան անվտանգությունն ու ջերմությունը:</p>
-                <a href="#why-choose-us" class="btn-carousel-lux">Իմանալ Ավելին</a>
+
+        <div
+            class="carousel-slide"
+            style="
+                width:33.333%;
+                height:100%;
+                background:
+                    linear-gradient(rgba(0,0,0,.52),rgba(0,0,0,.88)),
+                    url('https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?q=80&w=1600')
+                    no-repeat center/cover;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                text-align:center;
+                padding:0 20px;
+            "
+        >
+            <div style="max-width:800px;">
+
+                <div style="color:#d4af37;font-size:12px;font-weight:800;letter-spacing:4px;margin-bottom:16px;">
+                    QUALITY • SECURITY • STYLE
+                </div>
+
+                <h2
+                    style="
+                        font-size:clamp(32px,5vw,58px);
+                        color:#fff;
+                        font-weight:800;
+                        text-transform:uppercase;
+                        margin:0 0 15px;
+                    "
+                >
+                    Որակ և
+                    <span style="color:#d4af37;">Երաշխիք</span>
+                </h2>
+
+                <p
+                    style="
+                        color:#ddd;
+                        font-size:18px;
+                        line-height:1.7;
+                        margin:0 auto 30px;
+                        max-width:700px;
+                    "
+                >
+                    Մեր պատրաստած յուրաքանչյուր դուռ ստեղծված է Ձեր տան անվտանգության,
+                    ջերմության և հարմարավետության համար։
+                </p>
+
+                <a href="#products" class="btn-carousel-lux">
+                    Իմանալ Ավելին
+                </a>
             </div>
         </div>
 
     </div>
 
-    <button class="carousel-btn prev" onclick="moveSlide(-1)" aria-label="Previous Slide">‹</button>
-    <button class="carousel-btn next" onclick="moveSlide(1)" aria-label="Next Slide">›</button>
+    <button
+        class="carousel-btn prev"
+        onclick="moveSlide(-1)"
+        aria-label="Previous Slide"
+    >‹</button>
 
-    <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;">
+    <button
+        class="carousel-btn next"
+        onclick="moveSlide(1)"
+        aria-label="Next Slide"
+    >›</button>
+
+    <div
+        style="
+            position:absolute;
+            bottom:20px;
+            left:50%;
+            transform:translateX(-50%);
+            display:flex;
+            gap:10px;
+            z-index:10;
+        "
+    >
         <span class="carousel-dot active" onclick="currentSlide(0)"></span>
         <span class="carousel-dot" onclick="currentSlide(1)"></span>
         <span class="carousel-dot" onclick="currentSlide(2)"></span>
     </div>
 </div>
 
-<!-- New Collection Section -->
-<div class="new-collection-section" style="background: #0a0a0a; padding: 80px 5%;">
-    <div style="text-align: center; margin-bottom: 50px;">
-        <span style="color: #d4af37; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 8px;">Էքսկլյուզիվ</span>
-        <h2 style="color: #fff; font-size: 34px; font-weight: 700; margin: 0; text-transform: uppercase;"> Մեր <span style="color: #d4af37;">Նորույթները</span></h2>
-        <div style="width: 50px; height: 2px; background: #d4af37; margin: 15px auto 0;"></div>
+
+<!-- =====================================================
+     PRODUCTS
+===================================================== -->
+
+<section
+    id="products"
+    style="
+        background:#0a0a0a;
+        padding:80px 5%;
+    "
+>
+    <div
+        style="
+            text-align:center;
+            margin-bottom:50px;
+        "
+    >
+        <span
+            style="
+                color:#d4af37;
+                font-size:13px;
+                font-weight:700;
+                text-transform:uppercase;
+                letter-spacing:2px;
+                display:block;
+                margin-bottom:8px;
+            "
+        >
+            Էքսկլյուզիվ
+        </span>
+
+        <h2
+            style="
+                color:#fff;
+                font-size:34px;
+                font-weight:700;
+                margin:0;
+                text-transform:uppercase;
+            "
+        >
+            Մեր <span style="color:#d4af37;">Տեսականին</span>
+        </h2>
+
+        <div
+            style="
+                width:50px;
+                height:2px;
+                background:#d4af37;
+                margin:15px auto 0;
+            "
+        ></div>
     </div>
 
-    <div class="products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+
+    <div
+        class="products-grid"
+        style="
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:30px;
+            max-width:1200px;
+            margin:0 auto;
+        "
+    >
+
         {% for product in products %}
-        <div class="product-premium-card" style="background: linear-gradient(145deg, #141414, #0f0f0f); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; overflow: hidden; position: relative; transition: 0.3s ease; display: flex; flex-direction: column; justify-content: space-between;">
-            
-            <div style="position: absolute; top: 15px; left: 15px; background: linear-gradient(135deg, #d4af37, #aa7c11); color: #000; font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 20px; text-transform: uppercase; z-index: 3;">ՆՈՐՈՒՅԹ</div>
 
-            <div style="position: relative; width: 100%; height: 420px; overflow: hidden; background: #161616;">
-                {% if product.main_image %}
-                    {% if product.main_image.startswith('http') %}
-                        <img src="{{ product.main_image }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
-                    {% else %}
-                        <img src="{{ url_for('static', filename='uploads/' + product.main_image) }}" alt="{{ product.title }}" onerror="this.style.display='none'; document.getElementById('svg-fallback-{{ product.id }}').style.display='flex';" style="width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); display: block;">
-                    {% endif %}
-                {% endif %}
-                
-                <div id="svg-fallback-{{ product.id }}" class="svg-fallback-box {% if product.main_image %}has-image{% endif %}" style="width: 100%; height: 100%; align-items: center; justify-content: center; background: #161616;">
-                    <svg width="80" height="150" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="10" y="10" width="80" height="180" rx="4" fill="#222" stroke="#d4af37" stroke-width="2"/>
-                        <rect x="22" y="22" width="56" height="45" rx="2" fill="#1a1a1a" stroke="#d4af37" stroke-width="1" opacity="0.4"/>
-                        <rect x="22" y="77" width="56" height="100" rx="2" fill="#1a1a1a" stroke="#d4af37" stroke-width="1" opacity="0.4"/>
-                        <circle cx="80" cy="110" r="3.5" fill="#d4af37"/>
-                    </svg>
-                </div>
-                <a href="{{ url_for('product_detail', product_id=product.id) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;"></a>
+        <article
+            class="product-premium-card"
+            style="
+                background:linear-gradient(145deg,#141414,#0f0f0f);
+                border:1px solid rgba(255,255,255,.05);
+                border-radius:14px;
+                overflow:hidden;
+                position:relative;
+                transition:.35s ease;
+                display:flex;
+                flex-direction:column;
+            "
+        >
+
+            {% if product.is_new %}
+            <div
+                style="
+                    position:absolute;
+                    top:15px;
+                    left:15px;
+                    background:linear-gradient(135deg,#d4af37,#aa7c11);
+                    color:#000;
+                    font-size:10px;
+                    font-weight:800;
+                    padding:5px 10px;
+                    border-radius:20px;
+                    text-transform:uppercase;
+                    z-index:5;
+                "
+            >
+                ՆՈՐՈՒՅԹ
             </div>
+            {% endif %}
 
-            <div style="padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <span style="color: #666; font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 5px;">{{ product.category }}</span>
-                    <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin: 0 0 10px 0;"><a href="{{ url_for('product_detail', product_id=product.id) }}" style="color: #fff; text-decoration: none;">{{ product.title }}</a></h3>
-                </div>
-                <div style="margin-top: 10px;">
-                    <div style="font-size: 20px; color: #d4af37; font-weight: 700; margin-bottom: 15px;">{{ "{:,}".format(product.price) if product.price else 0 }} ֏</div>
-                    <div style="display: flex; gap: 10px;">
-                        <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn-view-details" style="flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px; font-size: 13px; border-radius: 6px; text-decoration: none; transition: 0.3s; text-transform: uppercase;">Դիտել</a>
-                        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" style="margin: 0; flex: 1;">
-                            <button type="submit" class="btn-add-cart-main" style="width: 100%; background: #d4af37; color: #000; border: none; padding: 10px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: 0.3s; text-transform: uppercase;">Զամբյուղ</button>
-                        </form>
+
+            <!-- REAL LOCAL PRODUCT IMAGE -->
+            <div
+                style="
+                    position:relative;
+                    width:100%;
+                    height:420px;
+                    overflow:hidden;
+                    background:#161616;
+                "
+            >
+
+                <img
+                    src="{{ url_for('static', filename='image/' ~ product.main_image) }}"
+                    alt="{{ product.title }}"
+                    loading="lazy"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                        object-position:center;
+                        display:block;
+                        transition:.5s ease;
+                    "
+                >
+
+                <!-- fallback if image is missing -->
+                <div
+                    style="
+                        display:none;
+                        position:absolute;
+                        inset:0;
+                        align-items:center;
+                        justify-content:center;
+                        background:#161616;
+                    "
+                >
+                    <div
+                        style="
+                            width:90px;
+                            height:190px;
+                            border:2px solid #d4af37;
+                            border-radius:5px;
+                            background:#222;
+                            position:relative;
+                        "
+                    >
+                        <span
+                            style="
+                                position:absolute;
+                                right:8px;
+                                top:50%;
+                                width:7px;
+                                height:7px;
+                                border-radius:50%;
+                                background:#d4af37;
+                            "
+                        ></span>
                     </div>
                 </div>
+
+                <a
+                    href="{{ url_for('product_detail', product_id=product.id) }}"
+                    aria-label="Դիտել {{ product.title }}"
+                    style="
+                        position:absolute;
+                        inset:0;
+                        z-index:2;
+                    "
+                ></a>
+
             </div>
-        </div>
+
+
+            <div
+                style="
+                    padding:20px;
+                    flex:1;
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:space-between;
+                "
+            >
+
+                <div>
+                    <span
+                        style="
+                            color:#666;
+                            font-size:12px;
+                            text-transform:uppercase;
+                            display:block;
+                            margin-bottom:5px;
+                        "
+                    >
+                        {{ product.category }}
+                    </span>
+
+                    <h3
+                        style="
+                            color:#fff;
+                            font-size:18px;
+                            font-weight:600;
+                            margin:0 0 10px;
+                        "
+                    >
+                        <a
+                            href="{{ url_for('product_detail', product_id=product.id) }}"
+                            style="color:#fff;text-decoration:none;"
+                        >
+                            {{ product.title }}
+                        </a>
+                    </h3>
+
+                    <p
+                        style="
+                            color:#888;
+                            font-size:13px;
+                            line-height:1.6;
+                            margin:0;
+                        "
+                    >
+                        {{ product.desc }}
+                    </p>
+                </div>
+
+
+                <div style="margin-top:20px;">
+
+                    <div
+                        style="
+                            font-size:20px;
+                            color:#d4af37;
+                            font-weight:700;
+                            margin-bottom:15px;
+                        "
+                    >
+                        {{ "{:,}".format(product.price).replace(",", " ") }} ֏
+                    </div>
+
+                    <div
+                        style="
+                            display:flex;
+                            gap:10px;
+                        "
+                    >
+
+                        <a
+                            href="{{ url_for('product_detail', product_id=product.id) }}"
+                            class="btn-view-details"
+                            style="
+                                flex:1;
+                                text-align:center;
+                                border:1px solid rgba(255,255,255,.12);
+                                color:#fff;
+                                padding:10px;
+                                font-size:13px;
+                                border-radius:6px;
+                                text-decoration:none;
+                                transition:.3s;
+                                text-transform:uppercase;
+                            "
+                        >
+                            Դիտել
+                        </a>
+
+                        <form
+                            action="{{ url_for('add_to_cart', product_id=product.id) }}"
+                            method="POST"
+                            style="margin:0;flex:1;"
+                        >
+                            <button
+                                type="submit"
+                                class="btn-add-cart-main"
+                                style="
+                                    width:100%;
+                                    background:#d4af37;
+                                    color:#000;
+                                    border:none;
+                                    padding:10px;
+                                    font-size:13px;
+                                    font-weight:700;
+                                    border-radius:6px;
+                                    cursor:pointer;
+                                    transition:.3s;
+                                    text-transform:uppercase;
+                                "
+                            >
+                                Զամբյուղ
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </article>
+
         {% endfor %}
+
     </div>
-</div>
+</section>
+
+
+<!-- =====================================================
+     WHY KARS
+===================================================== -->
+
+<section
+    id="why-choose-us"
+    style="
+        padding:80px 5%;
+        background:
+            radial-gradient(circle at 20% 50%,rgba(212,175,55,.08),transparent 30%),
+            #080808;
+    "
+>
+    <div style="max-width:1100px;margin:0 auto;text-align:center;">
+
+        <span
+            style="
+                color:#d4af37;
+                font-size:12px;
+                font-weight:800;
+                letter-spacing:3px;
+            "
+        >
+            WHY KARS LEGACY
+        </span>
+
+        <h2
+            style="
+                font-size:clamp(28px,4vw,42px);
+                margin:12px 0 15px;
+                color:#fff;
+            "
+        >
+            Ինչու ընտրել <span style="color:#d4af37;">մեզ</span>
+        </h2>
+
+        <p
+            style="
+                max-width:720px;
+                margin:0 auto;
+                color:#888;
+                line-height:1.8;
+            "
+        >
+            Ժամանակակից դիզայն, ամուր կառուցվածք և անհատական մոտեցում՝
+            Ձեր տան մուտքի համար։
+        </p>
+
+    </div>
+</section>
+
+
+<style>
+    .carousel-btn {
+        position:absolute;
+        top:50%;
+        transform:translateY(-50%);
+        background:rgba(0,0,0,.42);
+        border:1px solid rgba(212,175,55,.3);
+        color:#fff;
+        font-size:28px;
+        width:50px;
+        height:50px;
+        border-radius:50%;
+        cursor:pointer;
+        z-index:10;
+        transition:.3s;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        outline:none;
+    }
+
+    .carousel-btn.prev {
+        left:25px;
+    }
+
+    .carousel-btn.next {
+        right:25px;
+    }
+
+    .carousel-btn:hover {
+        background:#d4af37;
+        color:#000;
+    }
+
+    .carousel-dot {
+        width:11px;
+        height:11px;
+        background:rgba(255,255,255,.4);
+        border-radius:50%;
+        cursor:pointer;
+        transition:.3s;
+    }
+
+    .carousel-dot.active {
+        background:#d4af37;
+        transform:scale(1.15);
+    }
+
+    .btn-carousel-lux {
+        background:linear-gradient(135deg,#d4af37 0%,#aa7c11 100%);
+        color:#000 !important;
+        padding:13px 28px;
+        font-weight:700;
+        font-size:14px;
+        text-transform:uppercase;
+        text-decoration:none;
+        border-radius:6px;
+        display:inline-block;
+        transition:.3s;
+        box-shadow:0 8px 25px rgba(212,175,55,.18);
+    }
+
+    .btn-carousel-lux:hover {
+        background:#fff;
+        transform:translateY(-2px);
+    }
+
+    .product-premium-card:hover {
+        transform:translateY(-8px);
+        border-color:rgba(212,175,55,.4) !important;
+        box-shadow:0 20px 40px rgba(0,0,0,.6);
+    }
+
+    .product-premium-card:hover img {
+        transform:scale(1.05);
+    }
+
+    .btn-view-details:hover {
+        background:rgba(255,255,255,.05);
+        border-color:#fff !important;
+    }
+
+    .btn-add-cart-main:hover {
+        background:#fff !important;
+    }
+
+    @media (max-width: 700px) {
+        .luxury-carousel-container {
+            height:68vh !important;
+            min-height:500px !important;
+        }
+
+        .carousel-btn {
+            width:42px;
+            height:42px;
+            font-size:23px;
+        }
+
+        .carousel-btn.prev {
+            left:12px;
+        }
+
+        .carousel-btn.next {
+            right:12px;
+        }
+
+        .products-grid {
+            grid-template-columns:1fr !important;
+        }
+    }
+</style>
 
 <script>
     let currentIdx = 0;
-    const track = document.querySelector('.carousel-track');
-    const dots = document.querySelectorAll('.carousel-dot');
+    const track = document.querySelector(".carousel-track");
+    const dots = document.querySelectorAll(".carousel-dot");
     const totalSlides = 3;
     let autoSlideInterval;
 
     function updateCarousel() {
-        track.style.transform = `translateX(-${currentIdx * 33.333}%)`;
+        if (!track) return;
+
+        track.style.transform =
+            `translateX(-${currentIdx * 33.333333}%)`;
+
         dots.forEach((dot, index) => {
-            if(index === currentIdx) {
-                dot.classList.add('active');
-                dot.style.background = '#d4af37';
-            } else {
-                dot.classList.remove('active');
-                dot.style.background = 'rgba(255,255,255,0.4)';
-            }
+            dot.classList.toggle("active", index === currentIdx);
         });
     }
 
     function moveSlide(direction) {
         currentIdx += direction;
+
         if (currentIdx >= totalSlides) currentIdx = 0;
         if (currentIdx < 0) currentIdx = totalSlides - 1;
+
         updateCarousel();
         resetAutoSlide();
     }
@@ -131,78 +728,27 @@
     }
 
     function startAutoSlide() {
+        clearInterval(autoSlideInterval);
+
         autoSlideInterval = setInterval(() => {
             currentIdx++;
-            if (currentIdx >= totalSlides) currentIdx = 0;
+
+            if (currentIdx >= totalSlides) {
+                currentIdx = 0;
+            }
+
             updateCarousel();
-        }, 4000);
+        }, 4500);
     }
 
     function resetAutoSlide() {
-        clearInterval(autoSlideInterval);
         startAutoSlide();
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener("DOMContentLoaded", () => {
+        updateCarousel();
         startAutoSlide();
     });
 </script>
-
-<style>
-    .carousel-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0,0,0,0.4);
-        border: 1px solid rgba(212,175,55,0.3);
-        color: #fff;
-        font-size: 24px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        cursor: pointer;
-        z-index: 10;
-        transition: 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        outline: none;
-    }
-    .carousel-btn.prev { left: 25px; }
-    .carousel-btn.next { right: 25px; }
-    .carousel-dot {
-        width: 12px;
-        height: 12px;
-        background: rgba(255,255,255,0.4);
-        border-radius: 50%;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .btn-carousel-lux {
-        background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
-        color: #000 !important;
-        padding: 13px 28px;
-        font-weight: 700;
-        font-size: 14px;
-        text-transform: uppercase;
-        text-decoration: none;
-        border-radius: 6px;
-        display: inline-block;
-        transition: 0.3s;
-        box-shadow: 0 4px 15px rgba(212,175,55,0.2);
-    }
-    .btn-carousel-lux:hover { background: #fff; transform: translateY(-2px); }
-    .carousel-btn:hover { background: #d4af37 !important; color: #000 !important; }
-    .product-premium-card:hover {
-        transform: translateY(-8px) !important;
-        border-color: rgba(212, 175, 55, 0.4) !important;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
-    }
-    .product-premium-card:hover img { transform: scale(1.05) !important; }
-    .btn-view-details:hover { background: rgba(255,255,255,0.05); border-color: #fff; }
-    .btn-add-cart-main:hover { background: #fff; }
-    .svg-fallback-box { display: flex; }
-    .svg-fallback-box.has-image { display: none; }
-</style>
 
 {% endblock %}
